@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<script src="./babel-browser.min.js"></script>
+<script src="../node_modules/es6-module-loader/dist/es6-module-loader-dev.js"></script>
+<script src="../bower_components/jxon/index.js"></script>
+<script>
+System.transpiler = 'babel';
+</script>
+</head>
+<body>
+<script>
+'use strict';
+var
+  Frontiers = {},
+  SVector2,
+  SColor
+;
+System.import(
+  '../Assets/Scripts/Managers/Mods_Classes.js'
+).then(function(Mods_Classes){
+  for(var className of Object.keys(Mods_Classes.default)){
+    Frontiers[className] = Mods_Classes.default[className];
+  }
+  window.Frontiers = Frontiers;
+  console.log('FRONTIERS.JS is loaded!');
+  function setDisabled(isDisabled){
+    var
+      disabledStuffs = this.querySelectorAll('*[disabled]'),
+      i = 0|0
+    ;
+    for(i=0;i<disabledStuffs.length;++i){
+      disabledStuffs[i].disabled = isDisabled;
+    }
+  }
+  var
+    form = document.querySelector('form')
+  ;
+  setDisabled.call(form, false);
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    setDisabled.call(this, true);
+    var
+      directory = this.querySelector('[type="url"]').value
+    ;
+    Frontiers.ChunkTerrainData.FromURL(
+      directory + '/Terrain.frontiers'
+    ).then(function(chunk){
+      console.log('fetched chunk: ', chunk);
+      window.chunk = chunk;
+      chunk.GetHeightMapTiler(directory + '/Raw16Mac.raw').Canvas().then(
+        function(canvas){
+          document.body.appendChild(canvas);
+        },
+        function(canvasFailure){
+          alert('Fetched chunk, but failed to get canvas!');
+          console.error(canvasFailure);
+        }
+      )
+    }, function(failure){
+      alert('Error!');
+      console.error(failure);
+    });
+  });
+}, function(failure){
+  console.error(failure);
+});
+</script>
+<form>
+<input type="url" placeholder="path to folder for a Chunk" disabled>
+<button type="submit" disabled>Get</button>
+</form>
+</body>
+</html>

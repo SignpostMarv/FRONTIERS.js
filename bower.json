@@ -1,0 +1,20 @@
+{
+  "name": "FRONTIERS.js",
+  "version": "0.0.0",
+  "authors": [
+    "SignpostMarv <me@signpostmarv.name>"
+  ],
+  "moduleType": [
+    "es6"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jxon": "~1.4.0"
+  }
+}
