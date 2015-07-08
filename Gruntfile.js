@@ -22,12 +22,21 @@ module.exports = function(grunt) {
       gruntfile: {
         src: 'Gruntfile.js'
       },
+      Frontiers: {
+        options: {
+          esnext: true,
+        },
+        src: [
+          'Frontiers.js',
+        ],
+      },
       Assets: {
         options:{
           esnext: true,
           globals: {
             fetch: true,
             JXON: true,
+            Uint16Array: true,
             console: true,
           }
         },
@@ -43,11 +52,14 @@ module.exports = function(grunt) {
           esnext: true,
           globals: {
             JXON: true,
+            console: true,
+            fetch: true,
           }
         },
         src: [
           'Stubs/*.js',
           'Stubs/*/*.js',
+          'Stubs/*/*/*.js',
         ]
       },
       Utilities: {
@@ -68,6 +80,12 @@ module.exports = function(grunt) {
       gruntfile: {
         files: '<%= jshint.gruntfile.src %>',
         tasks: ['jshint:gruntfile']
+      },
+      Frontiers: {
+        files: '<%= jshint.Frontiers.src %>',
+        tasks: [
+          'jshint:Frontiers',
+        ],
       },
       Assets: {
         files: '<%= jshint.Assets.src %>',

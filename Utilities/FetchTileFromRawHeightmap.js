@@ -1,5 +1,3 @@
-import ChunkTerrainData from '../Assets/Scripts/Managers/Mods_Classes/ChunkTerrainData.js';
-
 export default (function(){
   'use strict';
   var
@@ -23,12 +21,8 @@ export default (function(){
   }
 
   class FetchTileFromRawHeightmap{
-    constructor(chunk, source, type, sourceEndianness){
-      if(!(chunk instanceof ChunkTerrainData)){
-        throw new Error('Supplied chunk must be instanceof ChunkTerrainData');
-      }
+    constructor(source, type, sourceEndianness){
       sourceEndianness = sourceEndianness || endianness();
-      this[props].ChunkTerrainData = chunk;
       this[props].sourceProp = source;
       this[props].typeProp = type;
       this[props].TypedArrayProp = null;
@@ -46,9 +40,9 @@ export default (function(){
         self[fetchMethod]().then(function(response){
           response.arrayBuffer().then(function(buffer){
             if(
-              Math.sqrt(
+              (Math.sqrt(
                 buffer.byteLength / self[props].typeProp.BYTES_PER_ELEMENT
-              ) !== self[props].ChunkTerrainData.HeightmapResolution
+              ) % 1) !== 0
             ){
               throw new Error(
                 'array buffer does not match expected resolution!'
@@ -192,6 +186,39 @@ export default (function(){
               resolve(canvas);
             });
           }, reject);
+        }, reject);
+      });
+    }
+
+    Heights(resolution){
+      var
+        self = this
+      ;
+      return new Promise(function(resolve, reject){
+        self.TypedArray().then(function(typedArray){
+          if(typedArray.length !== (resolution * resolution)){
+            reject(
+              'Heightmap did not match expected length!'
+            );
+            return;
+          }
+          var
+            heights = new Array(resolution),
+            divisor = Math.pow(2, (8 * typedArray.BYTES_PER_ELEMENT)) - 1,
+            i = 0|0,
+            x = 0|0,
+            z = 0|0
+          ;
+          for(i=0;i<typedArray.length;++i){
+            z = Math.floor(i / resolution);
+            x = i - (z * resolution);
+            if(heights[x] === undefined){
+              heights[x] = new Float32Array(resolution);
+            }
+            heights[x][z] = typedArray[i] / divisor;
+          }
+
+          resolve(heights);
         }, reject);
       });
     }

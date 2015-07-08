@@ -3,7 +3,6 @@ import TerrainkMaterialSettings from './TerrainkMaterialSettings.js';
 import SColor from '../../Utilities/SColor.js';
 import Serializable from '../../../../Stubs/Serializable.js';
 import TerrainPrototypeTemplate from './TerrainPrototypeTemplate.js';
-import FetchTileFromRawHeightmap from '../../../../Utilities/FetchTileFromRawHeightmap.js';
 
 export default (function(){
   'use strict';
@@ -296,19 +295,6 @@ export default (function(){
           }, reject);
         }, reject);
       });
-    }
-
-    GetHeightMapTiler(source, clearCache=false){
-      clearCache = !!clearCache;
-      if(this[props].HeightMapTiler === undefined || clearCache){
-        this[props].HeightMapTiler = new FetchTileFromRawHeightmap(
-          this,
-          source,
-          Uint16Array,
-          'BE'
-        );
-      }
-      return this[props].HeightMapTiler;
     }
   }
 

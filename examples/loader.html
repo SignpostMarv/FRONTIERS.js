@@ -11,17 +11,10 @@ System.transpiler = 'babel';
 <body>
 <script>
 'use strict';
-var
-  Frontiers = {},
-  SVector2,
-  SColor
-;
 System.import(
-  '../Assets/Scripts/Managers/Mods_Classes.js'
-).then(function(Mods_Classes){
-  for(var className of Object.keys(Mods_Classes.default)){
-    Frontiers[className] = Mods_Classes.default[className];
-  }
+  '../Frontiers.js'
+).then(function(Frontiers){
+  Frontiers = Frontiers.default;
   window.Frontiers = Frontiers;
   console.log('FRONTIERS.JS is loaded!');
   function setDisabled(isDisabled){
@@ -34,32 +27,41 @@ System.import(
     }
   }
   var
-    form = document.querySelector('form')
+    form = document.querySelector('form'),
+    directory = form.querySelector('[type="url"]'),
+    path = location.pathname.split('/')
   ;
+  path.pop();
+  path.pop();
+  path.push('Data');
+  path.unshift(location.hostname);
+  directory.value = location.protocol + '//' + path.join('/');
   setDisabled.call(form, false);
   form.addEventListener('submit', function(e){
     e.preventDefault();
     setDisabled.call(this, true);
-    var
-      directory = this.querySelector('[type="url"]').value
-    ;
-    Frontiers.ChunkTerrainData.FromURL(
-      directory + '/Terrain.frontiers'
-    ).then(function(chunk){
-      console.log('fetched chunk: ', chunk);
-      window.chunk = chunk;
-      chunk.GetHeightMapTiler(directory + '/Raw16Mac.raw').Canvas().then(
-        function(canvas){
-          document.body.appendChild(canvas);
-        },
-        function(canvasFailure){
-          alert('Fetched chunk, but failed to get canvas!');
-          console.error(canvasFailure);
-        }
-      )
-    }, function(failure){
+    Frontiers.Data.GameData.IO.InitializeSystemPaths(
+      directory.value
+    ).catch(function(e){
       alert('Error!');
-      console.error(failure);
+      console.error(e);
+    }).then(function(e){
+      Frontiers.Data.GameData.IO.LoadTerrainHeights(
+        1025,
+        'C-0-0-100',
+        'Raw16Mac',
+        Frontiers.DataType.World
+      ).then(function(heights){
+        console.log(heights); // an array of Float32Array instances
+      });
+      Frontiers.Data.GameData.IO.LoadTerrainCanvas(
+        1025,
+        'C-0-0-100',
+        'Raw16Mac',
+        Frontiers.DataType.World
+      ).then(function(canvas){
+        document.body.appendChild(canvas);
+      });
     });
   });
 }, function(failure){
@@ -67,7 +69,11 @@ System.import(
 });
 </script>
 <form>
-<input type="url" placeholder="path to folder for a Chunk" disabled>
+<input
+  type="url"
+  placeholder="path to folder for a Chunk"
+  disabled
+>
 <button type="submit" disabled>Get</button>
 </form>
 </body>
