@@ -118,7 +118,7 @@ export default (function(){
     }
   }
 
-  SVector3.prototype[props] = new WeakMap();
+  SVector3.prototype[props] = {};
   SVector3.prototype[props].x = +0;
   SVector3.prototype[props].y = +0;
   SVector3.prototype[props].z = +0;

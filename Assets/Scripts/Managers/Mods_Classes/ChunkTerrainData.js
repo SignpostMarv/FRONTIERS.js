@@ -312,7 +312,7 @@ export default (function(){
     }
   }
 
-  ChunkTerrainData.prototype[props] = new WeakMap();
+  ChunkTerrainData.prototype[props] = {};
 
 
   return ChunkTerrainData;

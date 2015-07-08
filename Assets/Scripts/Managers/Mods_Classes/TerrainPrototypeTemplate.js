@@ -235,7 +235,7 @@ export default (function(){
     }
   }
 
-  TerrainPrototypeTemplate.prototype[props] = new WeakMap();
+  TerrainPrototypeTemplate.prototype[props] = {};
 
   return TerrainPrototypeTemplate;
 })();

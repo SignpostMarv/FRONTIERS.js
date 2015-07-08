@@ -126,7 +126,7 @@ export default (function(){
     }
   }
 
-  Mod.prototype[props] = new WeakMap();
+  Mod.prototype[props] = {};
   Mod.prototype[props].Name = '';
   Mod.prototype[props].Description = '';
   Mod.prototype[props].Type = '';

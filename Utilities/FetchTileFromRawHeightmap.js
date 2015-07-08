@@ -197,7 +197,7 @@ export default (function(){
     }
   }
 
-  FetchTileFromRawHeightmap.prototype[props] = new WeakMap();
+  FetchTileFromRawHeightmap.prototype[props] = {};
 
   FetchTileFromRawHeightmap.prototype[fetchMethod] = function(){
     var

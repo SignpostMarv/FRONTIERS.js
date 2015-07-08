@@ -615,7 +615,7 @@ export default (function(){
     }
   }
 
-  TerrainkMaterialSettings.prototype[props] = new WeakMap();
+  TerrainkMaterialSettings.prototype[props] = {};
   for(var method in Object.keys(prototypeMethods)){
     TerrainkMaterialSettings.prototype[methods] = prototypeMethods[method];
   }

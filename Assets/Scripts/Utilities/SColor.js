@@ -142,7 +142,7 @@ export default (function(){
     }
   }
 
-  SColor.prototype[props] = new WeakMap();
+  SColor.prototype[props] = {};
   SColor.prototype[props].a = +1;
   SColor.prototype[props].r = +0;
   SColor.prototype[props].g = +0;
