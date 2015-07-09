@@ -100,9 +100,9 @@ module.exports = function(grunt) {
         ],
       },
       Utilities: {
-        files: '<%= jshint.Assets.src %>',
+        files: '<%= jshint.Utilities.src %>',
         tasks: [
-          'jshint:Assets',
+          'jshint:Utilities',
         ],
       },
     }
