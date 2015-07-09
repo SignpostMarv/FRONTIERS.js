@@ -16,6 +16,14 @@ export default (function(){
 
   class IO{
 
+    static LogPaths(){
+          Debug.Log(IO.gGlobalWorldsPath);
+          Debug.Log(IO.gGlobalProfilesPath);
+          Debug.Log(IO.gBaseWorldPath);
+          Debug.Log(IO.gBaseWorldModsPath);
+          Debug.Log(IO.gCurrentWorldModsPath);
+    }
+
     static InitializeSystemPaths(globalDataPath){
       return new Promise(function(resolve, reject){
         var
@@ -163,11 +171,7 @@ export default (function(){
             IO.gLoadedMaps = {};
           }
 
-          Debug.Log(IO.gGlobalWorldsPath);
-          Debug.Log(IO.gGlobalProfilesPath);
-          Debug.Log(IO.gBaseWorldPath);
-          Debug.Log(IO.gBaseWorldModsPath);
-          Debug.Log(IO.gCurrentWorldModsPath);
+          IO.LogPaths();
 
           if(!result){
             reject(errorMessage);
