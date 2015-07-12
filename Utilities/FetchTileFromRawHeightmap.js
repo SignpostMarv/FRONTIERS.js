@@ -197,9 +197,9 @@ export default (function(){
       return new Promise(function(resolve, reject){
         self.TypedArray().then(function(typedArray){
           if(typedArray.length !== (resolution * resolution)){
-            reject(
+            reject(new Error(
               'Heightmap did not match expected length!'
-            );
+            ));
             return;
           }
           var
