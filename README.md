@@ -3,7 +3,7 @@
 JavaScript transposition of [FRONTIERS c#](https://github.com/AADProductions/FRONTIERS)
 , because reasons.
 
-See the [ChunkTerrainData loader in action](https://youtu.be/z7kTiz19V_o)
+See [FRONTIERS.js in action](https://www.youtube.com/playlist?list=PL8cy8QkdhN7daOVm2d1CwIf2olQnWWCN_)
 
 ## Dependencies
 
