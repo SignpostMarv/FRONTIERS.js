@@ -1,4 +1,4 @@
-# FRONTIERS.JS
+# FRONTIERS.js
 
 JavaScript transposition of [FRONTIERS c#](https://github.com/AADProductions/FRONTIERS)
 , because reasons.
