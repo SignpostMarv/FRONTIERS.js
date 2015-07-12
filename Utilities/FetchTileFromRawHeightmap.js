@@ -204,6 +204,9 @@ export default (function(){
           }
           var
             heights = new Array(resolution),
+            heightsBuffer = new ArrayBuffer(
+              resolution * resolution * Float32Array.BYTES_PER_ELEMENT
+            ),
             divisor = Math.pow(2, (8 * typedArray.BYTES_PER_ELEMENT)) - 1,
             i = 0|0,
             x = 0|0,
@@ -213,7 +216,10 @@ export default (function(){
             z = Math.floor(i / resolution);
             x = i - (z * resolution);
             if(heights[x] === undefined){
-              heights[x] = new Float32Array(resolution);
+              heights[x] = new Float32Array(
+                heightsBuffer,
+                (resolution * z) * Float32Array.BYTES_PER_ELEMENT
+              );
             }
             heights[x][z] = typedArray[i] / divisor;
           }
