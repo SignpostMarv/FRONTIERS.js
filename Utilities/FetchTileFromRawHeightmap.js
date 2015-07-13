@@ -218,7 +218,8 @@ export default (function(){
             if(heights[x] === undefined){
               heights[x] = new Float32Array(
                 heightsBuffer,
-                (resolution * z) * Float32Array.BYTES_PER_ELEMENT
+                (resolution * z) * Float32Array.BYTES_PER_ELEMENT,
+                resolution
               );
             }
             heights[x][z] = typedArray[i] / divisor;
