@@ -37,9 +37,7 @@ System.import(
   path.unshift(location.hostname);
   directory.value = location.protocol + '//' + path.join('/');
   setDisabled.call(form, false);
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    setDisabled.call(this, true);
+  function doStuff(){
     Frontiers.Data.GameData.IO.InitializeSystemPaths(
       directory.value
     ).catch(function(e){
@@ -63,7 +61,13 @@ System.import(
         document.body.appendChild(canvas);
       });
     });
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    setDisabled.call(this, true);
+    doStuff();
   });
+  doStuff();
 }, function(failure){
   console.error(failure);
 });
