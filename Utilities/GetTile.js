@@ -87,14 +87,6 @@ export default function(sx, sz, sw, sh){
           z < 0 ||
           z > self.height
         ){
-          console.log(
-            'skipping',
-            x, z,
-            dx, dz,
-            sx, sz,
-            di, si,
-            sw, sh
-          );
           continue;
         }
         for(x=sx;x<xlim;++x){
@@ -102,29 +94,12 @@ export default function(sx, sz, sw, sh){
             x < 0 ||
             x > self.width
           ){
-            console.log(
-              'skipping',
-              x, z,
-              dx, dz,
-              sx, sz,
-              di, si,
-              sw, sh
-            );
             continue;
           }
           dx = x - sx;
           di = (dz * sw) + dx;
           si = (z * self.width) + x;
           newTypedArray[di] = typedArray[si];
-        }
-        if(sz === 0 && sx === 0 && sw === 33){
-          console.log(
-            x, z,
-            dx, dz,
-            sx, sz,
-            di, si,
-            sw, sh
-          );
         }
       }
       resolve(new FetchTileFromTypedArray(newTypedArray, sw, sh));
