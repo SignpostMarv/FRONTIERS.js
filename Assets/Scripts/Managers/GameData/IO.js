@@ -5,13 +5,17 @@ import Application from '../../../../Stubs/Unity/Application.js';
 import RuntimePlatform from '../../../../Stubs/Unity/RuntimePlatform.js';
 import Debug from '../../../../Stubs/Unity/Debug.js';
 import DataType from '../../Global/Enums/DataType.js';
+import XmlHelper from './XmlHelper.js';
+import filterOutRootNode from '../../../../Utilities/filterOutRootNode.js';
+import WorldSettings from '../Mods_Classes/WorldSettings.js';
 
 export default (function(){
   'use strict';
 
   var
     staticProps = Symbol('props'),
-    GetHeightMapTiler = Symbol('GetHeightMapTiler')
+    GetHeightMapTiler = Symbol('GetHeightMapTiler'),
+    pendingWorldLoaders = {}
   ;
 
   class IO{
@@ -255,6 +259,42 @@ export default (function(){
         default:
           return IO.gBaseWorldModsPath;
       }
+    }
+
+    static LoadWorld(worldName){
+      if(typeof(worldName) !== 'string'){
+        return new Promise(function(...reject){
+          reject(new Error(
+            'world name must be specified as string!'
+          ));
+        });
+      }
+      if(!(worldName in pendingWorldLoaders)){
+        pendingWorldLoaders[worldName] = new Promise(function(resolve, reject){
+          var
+            path = Path.Combine(
+              IO.gGlobalWorldsPath,
+              (worldName + IO.gDataExtension)
+            )
+          ;
+          XmlHelper.Url2JXON(path).then(
+            function(jxon){
+              filterOutRootNode(
+                jxon,
+                'WorldSettings'
+              ).then(function(jxon){
+                WorldSettings.FromJXON(jxon).then(function(resp){
+                  console.log(resp);
+                  resolve(resp);
+                });
+              });
+            },
+            reject
+          );
+        });
+      }
+
+      return pendingWorldLoaders[worldName];
     }
 
     static get gGlobalProfilesPath(){
