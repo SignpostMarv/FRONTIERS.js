@@ -1,9 +1,26 @@
+import applyDefaultPropsSpecToObject from '../../../../Utilities/applyDefaultPropsSpecToObject.js';
 export default (function(){
   var
-    props = Symbol('props')
+    props = Symbol('props'),
+    defaultProps = {
+      Name: '',
+      Description: '',
+      Type: '',
+      Dependencies: '',
+      Version: '',
+      DisplayOrder: 0|0,
+      Enabled: true,
+      ListInAvailable: true,
+      BaseData: false,
+      mFullDescription: '',
+    }
   ;
 
   class Mod{
+
+    constructor(){
+      applyDefaultPropsSpecToObject(this, props, defaultProps);
+    }
 
     get FullDescription(){
       if(
@@ -101,6 +118,17 @@ export default (function(){
       return other.DisplayOrder - this.DisplayOrder;
     }
 
+    copyFrom(other){
+      if(!(other instanceof Mod)){
+        throw new Error(
+          'Can only copy from other instances of Mod'
+        );
+      }
+      Object.keys(defaultProps).forEach(prop => {
+        this[prop] = other[prop];
+      });
+    }
+
     static FromJXON(jxon, obj){
       return new Promise(function(resolve, reject){
         if(obj === undefined){
@@ -125,20 +153,6 @@ export default (function(){
       });
     }
   }
-
-  Mod.prototype[props] = {};
-  Mod.prototype[props].Name = '';
-  Mod.prototype[props].Description = '';
-  Mod.prototype[props].Type = '';
-  Mod.prototype[props].Dependencies = '';
-  Mod.prototype[props].Version = '';
-  Mod.prototype[props].DisplayOrder = 0|0;
-  Mod.prototype[props].Enabled = true;
-  Mod.prototype[props].ListInAvailable = true;
-
-  Mod.prototype[props].BaseData = false;
-
-  Mod.prototype[props].mFullDescription = '';
 
   return Mod;
 })();
