@@ -30,6 +30,15 @@ module.exports = function(grunt) {
           'Frontiers.js',
         ],
       },
+      Namespaced: {
+        options: {
+          esnext: true,
+        },
+        src: [
+          '_Namespaced/*.js',
+          '_Namespaced/*/*.js',
+        ],
+      },
       Assets: {
         options:{
           esnext: true,
@@ -45,7 +54,20 @@ module.exports = function(grunt) {
           'Assets/*/*.js',
           'Assets/*/*/*.js',
           'Assets/*/*/*/*.js',
+          'Assets/*/*/*/*/*.js',
         ],
+      },
+      Shims: {
+        options: {
+          esnext: true,
+          globals: {
+            JXON: true,
+            console: true,
+          }
+        },
+        src: [
+          'Shims/*.js',
+        ]
       },
       Stubs: {
         options: {
@@ -81,30 +103,22 @@ module.exports = function(grunt) {
         files: '<%= jshint.gruntfile.src %>',
         tasks: ['jshint:gruntfile']
       },
-      Frontiers: {
-        files: '<%= jshint.Frontiers.src %>',
-        tasks: [
-          'jshint:Frontiers',
+      lib: {
+        files: [
+          '<%= jshint.Assets.src %>',
+          '<%= jshint.Stubs.src %>',
+          '<%= jshint.Shims.src %>',
+          '<%= jshint.Utilities.src %>',
+          '<%= jshint.Namespaced.src %>',
         ],
-      },
-      Assets: {
-        files: '<%= jshint.Assets.src %>',
         tasks: [
           'jshint:Assets',
-        ],
-      },
-      Stubs: {
-        files: '<%= jshint.Stubs.src %>',
-        tasks: [
+          'jshint:Shims',
           'jshint:Stubs',
-        ],
-      },
-      Utilities: {
-        files: '<%= jshint.Utilities.src %>',
-        tasks: [
           'jshint:Utilities',
-        ],
-      },
+          'jshint:Namespaced',
+        ]
+      }
     }
   });
 
