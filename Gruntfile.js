@@ -22,12 +22,12 @@ module.exports = function(grunt) {
       gruntfile: {
         src: 'Gruntfile.js'
       },
-      Frontiers: {
+      FRONTIERS: {
         options: {
           esnext: true,
         },
         src: [
-          'Frontiers.js',
+          'FRONTIERS.js',
         ],
       },
       Namespaced: {
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
       },
       lib: {
         files: [
-          '<%= jshint.Frontiers.src %>',
+          '<%= jshint.FRONTIERS.src %>',
           '<%= jshint.Assets.src %>',
           '<%= jshint.Stubs.src %>',
           '<%= jshint.Shims.src %>',
@@ -113,7 +113,7 @@ module.exports = function(grunt) {
           '<%= jshint.Namespaced.src %>',
         ],
         tasks: [
-          'jshint:Frontiers',
+          'jshint:FRONTIERS',
           'jshint:Assets',
           'jshint:Shims',
           'jshint:Stubs',
