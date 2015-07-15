@@ -194,6 +194,7 @@ export default (function(){
         }
         resolution = resolution|0;
         IO[GetHeightMapTiler](
+          resolution,
           chunkName,
           rawFileName,
           type
@@ -208,13 +209,36 @@ export default (function(){
 
     static LoadTerrainCanvas(resolution, chunkName, rawFileName, type){
       return new Promise(function(resolve, reject){
-        console.info('resolution not used', resolution);
         IO[GetHeightMapTiler](
+          resolution,
           chunkName,
           rawFileName,
           type
         ).Canvas().then(resolve).catch(reject);
       });
+    }
+
+    static LoadTerrainTile(
+      sx,
+      sz,
+      sw,
+      sh,
+      resolution,
+      chunkName,
+      rawFileName,
+      type
+    ){
+      return IO[GetHeightMapTiler](
+        resolution,
+        chunkName,
+        rawFileName,
+        type
+      ).GetTile(
+        sx,
+        sz,
+        sw,
+        sh
+      );
     }
 
     static GetDataPath(type){
@@ -514,7 +538,7 @@ export default (function(){
     gAssetBundleExtension : '.unity3d',
   };
 
-  IO[GetHeightMapTiler] = function(chunkName, rawFileName, type){
+  IO[GetHeightMapTiler] = function(resolution, chunkName, rawFileName, type){
     var
       dataPath = IO.GetDataPath(type),
       directory = Path.Combine(dataPath, Path.Combine('Chunk', chunkName)),
@@ -524,7 +548,9 @@ export default (function(){
       )
     ;
 
-    return new FetchTileFromRawHeightmap(
+    return FetchTileFromRawHeightmap.Get(
+      resolution,
+      resolution,
       fullPath,
       Uint16Array,
       'BE'
