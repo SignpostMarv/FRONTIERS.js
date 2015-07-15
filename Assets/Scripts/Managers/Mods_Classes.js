@@ -6,6 +6,8 @@ import WorldSettings from './Mods_Classes/WorldSettings.js';
 import ChunkBiomeData from './Mods_Classes/ChunkBiomeData.js';
 import WeatherSetting from './Mods_Classes/WeatherSetting.js';
 import BiomeWeatherSetting from './Mods_Classes/BiomeWeatherSetting.js';
+import ChunkDisplaySettings from './Mods_Classes/ChunkDisplaySettings.js';
+import ChunkState from './Mods_Classes/ChunkState.js';
 
 export default {
   ChunkTerrainData: ChunkTerrainData,
@@ -16,4 +18,6 @@ export default {
   ChunkBiomeData: ChunkBiomeData,
   WeatherSetting: WeatherSetting,
   BiomeWeatherSetting: BiomeWeatherSetting,
+  ChunkDisplaySettings: ChunkDisplaySettings,
+  ChunkState: ChunkState,
 };

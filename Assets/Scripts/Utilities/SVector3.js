@@ -1,3 +1,5 @@
+import XmlHelper from '../Managers/GameData/XmlHelper.js';
+
 export default (function(){
   var
     props = Symbol('props')
@@ -114,6 +116,19 @@ export default (function(){
         Math.random() * (max - min) + min,
         Math.random() * (max - min) + min,
         Math.random() * (max - min) + min
+      );
+    }
+
+    static FromJXON(jxon){
+      return XmlHelper.JXON2Type(
+        jxon,
+        null,
+        SVector3,
+        [
+          'x',
+          'y',
+          'z'
+        ]
       );
     }
   }

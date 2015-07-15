@@ -8,6 +8,7 @@ import DataType from '../../Global/Enums/DataType.js';
 import XmlHelper from './XmlHelper.js';
 import filterOutRootNode from '../../../../Utilities/filterOutRootNode.js';
 import WorldSettings from '../Mods_Classes/WorldSettings.js';
+import ChunkState from '../Mods_Classes/ChunkState.js';
 
 export default (function(){
   'use strict';
@@ -295,6 +296,32 @@ export default (function(){
       }
 
       return pendingWorldLoaders[worldName];
+    }
+
+    static LoadWorldData(directoryName, fileName){
+      return IO.LoadData(directoryName, fileName, DataType.World);
+    }
+
+    static LoadData(directoryName, fileName, type){
+      return new Promise(function(resolve, reject){
+        var
+          dataPath = IO.GetDataPath(type),
+          directory = Path.Combine(dataPath, directoryName),
+          path = Path.Combine(directory, (fileName + IO.gDataExtension))
+        ;
+
+        XmlHelper.Url2JXON(path).then(function(jxon){
+          if(Object.keys(jxon).length === 1){
+            switch(Object.keys(jxon)[0]){
+              case 'ChunkState':
+                resolve(ChunkState.FromJXON(jxon.ChunkState));
+            }
+          }else{
+            console.error(jxon);
+            reject(new Error('Cannot autodiscover multi-key loader'));
+          }
+        }, reject);
+      });
     }
 
     static get gGlobalProfilesPath(){
