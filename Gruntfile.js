@@ -105,6 +105,7 @@ module.exports = function(grunt) {
       },
       lib: {
         files: [
+          '<%= jshint.Frontiers.src %>',
           '<%= jshint.Assets.src %>',
           '<%= jshint.Stubs.src %>',
           '<%= jshint.Shims.src %>',
@@ -112,6 +113,7 @@ module.exports = function(grunt) {
           '<%= jshint.Namespaced.src %>',
         ],
         tasks: [
+          'jshint:Frontiers',
           'jshint:Assets',
           'jshint:Shims',
           'jshint:Stubs',
