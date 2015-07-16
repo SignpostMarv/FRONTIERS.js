@@ -42,6 +42,7 @@ module.exports = function(grunt) {
       Assets: {
         options:{
           esnext: true,
+          browser: true,
           globals: {
             fetch: true,
             JXON: true,

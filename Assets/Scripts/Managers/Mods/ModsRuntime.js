@@ -8,6 +8,10 @@ export default (function(){
     LoadMod(dataType, dataName){
       return IO.LoadWorldData(dataType, dataName);
     }
+
+    Texture(dataType, dataName){
+      return IO.LoadWorldTexture(dataType, dataName);
+    }
   }
 
   return ModsRuntime;

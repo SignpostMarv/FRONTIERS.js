@@ -17,7 +17,8 @@ export default (function(){
   var
     staticProps = Symbol('props'),
     GetHeightMapTiler = Symbol('GetHeightMapTiler'),
-    pendingWorldLoaders = {}
+    pendingWorldLoaders = {},
+    pendingTextureLoaders = {}
   ;
 
   class IO{
@@ -329,6 +330,105 @@ export default (function(){
           }
         }, reject);
       });
+    }
+
+    static LoadWorldTexture(dataName, fileName){
+      var
+        dataPath = IO.GetDataPath(DataType.World),
+        path = Path.Combine(
+          Path.Combine(dataPath, dataName),
+          (fileName + IO.gImageExtension)
+        )
+      ;
+
+      return IO.LoadTexture(path);
+    }
+
+    static LoadTerrainMap(
+      resolution,
+      linear,
+      filtering,
+      chunkName,
+      mapName,
+      type
+    ){
+      var
+        dataPath = IO.GetDataPath(type),
+        directory = Path.Combine(dataPath, 'ChunkMap'),
+        fullPath = Path.Combine(
+          directory,
+          (chunkName + '-' + mapName + IO.gImageExtension)
+        )
+      ;
+
+      return new Promise(function(resolve, reject){
+        if(typeof(resolution) !== 'number'){
+          reject(new Error('Resolution must be a number!'));
+          return;
+        }
+        resolution = resolution|0;
+        IO.LoadTexture(fullPath).then(function(ctx){
+          if(!ctx){
+            resolve(false);
+            return;
+          }
+          var
+            map = document.createElement('canvas').getContext('2d')
+          ;
+          map.canvas.width = resolution;
+          map.canvas.height = resolution;
+          if(!filtering){
+            map.mozImageSmoothingEnabled = false;
+            map.msImageSmoothingEnabled = false;
+            map.imageSmoothingEnabled = false;
+          }
+          map.drawImage(ctx.canvas, 0, 0, resolution, resolution);
+          resolve(map);
+        }, function(failure){
+          delete pendingTextureLoaders[fullPath];
+          reject(failure);
+        });
+      });
+    }
+
+    static LoadTexture(path){
+      if(!(path in pendingTextureLoaders)){
+        pendingTextureLoaders[path] = new Promise(function(resolve){
+          var
+            failureResolution = function(failure){
+              console.error(failure);
+              resolve(failure);
+            }
+          ;
+          fetch(path).then(
+            function(response){
+              response.clone().blob().then(function(blob){
+                var
+                  objectUrl = URL.createObjectURL(blob),
+                  img = new Image()
+                ;
+                img.onload = function(){
+                  var
+                    ctx = document.createElement('canvas').getContext('2d')
+                  ;
+                  ctx.canvas.width = this.width;
+                  ctx.canvas.height = this.height;
+                  ctx.drawImage(img, 0, 0);
+                  URL.revokeObjectURL(objectUrl);
+                  resolve(ctx);
+                };
+                img.onerror = function(e){
+                  failureResolution(e);
+                };
+                img.src = objectUrl;
+              }, failureResolution);
+            },
+            failureResolution
+          );
+        });
+      }
+
+      return pendingTextureLoaders[path];
     }
 
     static get gGlobalProfilesPath(){
