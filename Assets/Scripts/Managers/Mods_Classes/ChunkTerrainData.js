@@ -219,7 +219,7 @@ export default (function(){
       this[props].PassThroughChunkData = !!val;
     }
 
-    static FromJXON(jxon, obj){
+    static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,
         null,

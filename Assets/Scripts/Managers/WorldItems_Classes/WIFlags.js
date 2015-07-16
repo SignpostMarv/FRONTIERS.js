@@ -186,15 +186,6 @@ export default (function(){
       this[props].Faction = val|0;
     }
 
-    CopyFrom(other){
-      if(!(other instanceof WIFlags)){
-        throw new Error('Can only copy from other instances of WIFlags');
-      }
-      Object.keys(defaultProps).forEach(prop => {
-        this[prop] = other[prop];
-      });
-    }
-
     static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,
