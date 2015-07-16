@@ -149,7 +149,7 @@ export default (function(){
     }
 
     set HealthColor(val){
-      this[props].HealthColor.copyFrom(val);
+      this[props].HealthColor.CopyFrom(val);
     }
 
     get DryColor(){
@@ -157,7 +157,7 @@ export default (function(){
     }
 
     set DryColor(val){
-      this[props].DryColor.copyFrom(val);
+      this[props].DryColor.CopyFrom(val);
     }
 
     get UserPrototypeMesh(){

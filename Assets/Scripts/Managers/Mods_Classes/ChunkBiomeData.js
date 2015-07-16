@@ -114,13 +114,13 @@ export default (function(){
       applyDefaultPropsSpecToObject(this, props, defaultProps);
     }
 
-    copyFrom(other){
+    CopyFrom(other){
       if(!(other instanceof ChunkBiomeData)){
         throw new Error(
           'Can only copy from other instances of ChunkBiomeData'
         );
       }
-      super.copyFrom(other);
+      super.CopyFrom(other);
       Object.keys(defaultProps).forEach(prop => {
         this[prop] = other[prop];
       });

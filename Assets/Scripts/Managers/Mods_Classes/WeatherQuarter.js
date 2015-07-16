@@ -94,7 +94,7 @@ export default (function(){
       this[props].CloudType.fromVal(val);
     }
 
-    copyFrom(other){
+    CopyFrom(other){
       if(!(other instanceof WeatherQuarter)){
         throw new Error(
           'Can only copy from other instances of WeatherQuarter'

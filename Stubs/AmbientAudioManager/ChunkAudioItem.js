@@ -42,7 +42,7 @@ export default (function(){
       this[props].TargetVolume = +val;
     }
 
-    copyFrom(other){
+    CopyFrom(other){
       if(other instanceof ChunkAudioItem){
         Object.keys(defaultProps).forEach(prop => {
           this[prop] = other[prop];

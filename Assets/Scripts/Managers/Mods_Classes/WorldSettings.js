@@ -121,7 +121,7 @@ export default (function(){
     }
 
     set DefaultTerrainType(val){
-      this[props].DefaultTerrainType.copyFrom(val);
+      this[props].DefaultTerrainType.CopyFrom(val);
     }
 
     get DefaultBiome(){
@@ -137,7 +137,7 @@ export default (function(){
     }
 
     set DefaultAmbientAudio(val){
-      this[props].DefaultAmbientAudio.copyFrom(val);
+      this[props].DefaultAmbientAudio.CopyFrom(val);
     }
 
     get DefaultAmbientAudioInterior(){
@@ -145,7 +145,7 @@ export default (function(){
     }
 
     set DefaultAmbientAudioInterior(val){
-      this[props].DefaultAmbientAudioInterior.copyFrom(val);
+      this[props].DefaultAmbientAudioInterior.CopyFrom(val);
     }
 
     get IgnoreProfileDataIfOutdated(){
@@ -325,7 +325,7 @@ export default (function(){
     }
 
     set DefaultResidentFlags(val){
-      this[props].DefaultResidentFlags.copyFrom(val);
+      this[props].DefaultResidentFlags.CopyFrom(val);
     }
 
     get DefaultContainerFlags(){
@@ -333,7 +333,7 @@ export default (function(){
     }
 
     set DefaultContainerFlags(val){
-      this[props].DefaultContainerFlags.copyFrom(val);
+      this[props].DefaultContainerFlags.CopyFrom(val);
     }
 
     get DefaultBiomeData(){
@@ -341,7 +341,7 @@ export default (function(){
     }
 
     set DefaultBiomeData(val){
-      this[props].DefaultBiomeData.copyFrom(val);
+      this[props].DefaultBiomeData.CopyFrom(val);
     }
 
     get BaseDifficultySettingNames(){
@@ -362,7 +362,7 @@ export default (function(){
     }
 
     set DefaultHouseOfHealing(val){
-      this[props].DefaultHouseOfHealing.copyFrom(val);
+      this[props].DefaultHouseOfHealing.CopyFrom(val);
     }
 
     get NumChunkTilesX(){

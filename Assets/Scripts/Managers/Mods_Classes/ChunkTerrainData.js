@@ -100,12 +100,16 @@ export default (function(){
       return this[props].MaterialSettings;
     }
 
+    set MaterialSettings(val){
+      this[props].MaterialSettings.CopyFrom(val);
+    }
+
     get GrassTint(){
       return this[props].GrassTint;
     }
 
     set GrassTint(val){
-      this[props].GrassTint.copyFrom(val);
+      this[props].GrassTint.CopyFrom(val);
     }
 
     get WindSpeed(){

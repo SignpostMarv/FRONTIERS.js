@@ -118,7 +118,7 @@ export default (function(){
       return other.DisplayOrder - this.DisplayOrder;
     }
 
-    copyFrom(other){
+    CopyFrom(other){
       if(!(other instanceof Mod)){
         throw new Error(
           'Can only copy from other instances of Mod'

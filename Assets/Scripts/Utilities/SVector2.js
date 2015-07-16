@@ -35,6 +35,17 @@ export default (function(){
       this[props.y] = val;
     }
 
+    CopyFrom(other){
+      if(!(other instanceof SVector2)){
+        console.error(other);
+        throw new Error(
+          'Can only copy from other instances of SVector2'
+        );
+      }
+      this.x = other.x;
+      this.y = other.y;
+    }
+
     static get zero(){
       return new SVector2();
     }

@@ -28,7 +28,7 @@ export default (function(){
         throw new Error('QuarterMorning must be instanceof WeatherQuarter');
       }
 
-      this[propMorning].copyFrom(val);
+      this[propMorning].CopyFrom(val);
     }
 
     get QuarterAfternoon(){
@@ -40,7 +40,7 @@ export default (function(){
         throw new Error('QuarterAfternoon must be instanceof WeatherQuarter');
       }
 
-      this[propAfternoon].copyFrom(val);
+      this[propAfternoon].CopyFrom(val);
     }
 
     get QuarterEvening(){
@@ -52,7 +52,7 @@ export default (function(){
         throw new Error('QuarterEvening must be instanceof WeatherQuarter');
       }
 
-      this[propEvening].copyFrom(val);
+      this[propEvening].CopyFrom(val);
     }
 
     get QuarterNight(){
@@ -64,7 +64,7 @@ export default (function(){
         throw new Error('QuarterNight must be instanceof WeatherQuarter');
       }
 
-      this[propNight].copyFrom(val);
+      this[propNight].CopyFrom(val);
     }
 
     static FromJXON(jxon){

@@ -38,7 +38,7 @@ export default (function(){
     }
 
     set AgDayCoastal(val){
-      this[props].AgDayCoastal.copyFrom(val);
+      this[props].AgDayCoastal.CopyFrom(val);
     }
 
     get AgDayForest(){
@@ -46,7 +46,7 @@ export default (function(){
     }
 
     set AgDayForest(val){
-      this[props].AgDayForest.copyFrom(val);
+      this[props].AgDayForest.CopyFrom(val);
     }
 
     get AgDayCivilized(){
@@ -54,7 +54,7 @@ export default (function(){
     }
 
     set AgDayCivilized(val){
-      this[props].AgDayCivilized.copyFrom(val);
+      this[props].AgDayCivilized.CopyFrom(val);
     }
 
     get AgDayOpen(){
@@ -62,7 +62,7 @@ export default (function(){
     }
 
     set AgDayOpen(val){
-      this[props].AgDayOpen.copyFrom(val);
+      this[props].AgDayOpen.CopyFrom(val);
     }
 
     get AgNightCoastal(){
@@ -70,7 +70,7 @@ export default (function(){
     }
 
     set AgNightCoastal(val){
-      this[props].AgNightCoastal.copyFrom(val);
+      this[props].AgNightCoastal.CopyFrom(val);
     }
 
     get AgNightForested(){
@@ -78,7 +78,7 @@ export default (function(){
     }
 
     set AgNightForested(val){
-      this[props].AgNightForested.copyFrom(val);
+      this[props].AgNightForested.CopyFrom(val);
     }
 
     get AgNightCivilized(){
@@ -86,7 +86,7 @@ export default (function(){
     }
 
     set AgNightCivilized(val){
-      this[props].AgNightCivilized.copyFrom(val);
+      this[props].AgNightCivilized.CopyFrom(val);
     }
 
     get AgNightOpen(){
@@ -94,7 +94,7 @@ export default (function(){
     }
 
     set AgNightOpen(val){
-      this[props].AgNightOpen.copyFrom(val);
+      this[props].AgNightOpen.CopyFrom(val);
     }
 
     get UgShallow(){
@@ -102,7 +102,7 @@ export default (function(){
     }
 
     set UgShallow(val){
-      this[props].UgShallow.copyFrom(val);
+      this[props].UgShallow.CopyFrom(val);
     }
 
     get UgDeep(){
@@ -110,7 +110,7 @@ export default (function(){
     }
 
     set UgDeep(val){
-      this[props].UgDeep.copyFrom(val);
+      this[props].UgDeep.CopyFrom(val);
     }
 
     get UgEnclosed(){
@@ -118,7 +118,7 @@ export default (function(){
     }
 
     set UgEnclosed(val){
-      this[props].UgEnclosed.copyFrom(val);
+      this[props].UgEnclosed.CopyFrom(val);
     }
 
     get UgOpen(){
@@ -126,7 +126,7 @@ export default (function(){
     }
 
     set UgOpen(val){
-      this[props].UgOpen.copyFrom(val);
+      this[props].UgOpen.CopyFrom(val);
     }
 
     get Rain(){
@@ -134,7 +134,7 @@ export default (function(){
     }
 
     set Rain(val){
-      this[props].Rain.copyFrom(val);
+      this[props].Rain.CopyFrom(val);
     }
 
     get Wind(){
@@ -142,7 +142,7 @@ export default (function(){
     }
 
     set Wind(val){
-      this[props].Wind.copyFrom(val);
+      this[props].Wind.CopyFrom(val);
     }
 
     get Thunder(){
@@ -150,10 +150,10 @@ export default (function(){
     }
 
     set Thunder(val){
-      this[props].Thunder.copyFrom(val);
+      this[props].Thunder.CopyFrom(val);
     }
 
-    copyFrom(other){
+    CopyFrom(other){
       if(!(other instanceof ChunkAudioSettings)){
         throw new Error(
           'Can only copy from other instances of ChunkAudioSettings'

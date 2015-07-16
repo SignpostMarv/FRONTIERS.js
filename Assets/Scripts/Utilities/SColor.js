@@ -64,7 +64,7 @@ export default (function(){
       this[props].b = val;
     }
 
-    copyFrom(val){
+    CopyFrom(val){
       if(!(val instanceof SColor)){
         console.error(val);
         throw new Error('SColor can only copy from SColor');

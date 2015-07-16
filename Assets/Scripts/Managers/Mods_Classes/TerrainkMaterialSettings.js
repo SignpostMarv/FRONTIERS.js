@@ -276,7 +276,7 @@ export default (function(){
     }
 
     set TerrainSpecColor(val){
-      this[props].TerrainSpecColor.copyFrom(val);
+      this[props].TerrainSpecColor.CopyFrom(val);
     }
 
     get TerrainSpecPower(){
@@ -295,7 +295,7 @@ export default (function(){
     }
 
     set Texture1Average(val){
-      this[props].Texture1Average.copyFrom(val);
+      this[props].Texture1Average.CopyFrom(val);
     }
 
     get Texture2Average(){
@@ -303,7 +303,7 @@ export default (function(){
     }
 
     set Texture2Average(val){
-      this[props].Texture2Average.copyFrom(val);
+      this[props].Texture2Average.CopyFrom(val);
     }
 
     get Texture3Average(){
@@ -311,7 +311,7 @@ export default (function(){
     }
 
     set Texture3Average(val){
-      this[props].Texture3Average.copyFrom(val);
+      this[props].Texture3Average.CopyFrom(val);
     }
 
     get Texture4Average(){
@@ -319,7 +319,7 @@ export default (function(){
     }
 
     set Texture4Average(val){
-      this[props].Texture4Average.copyFrom(val);
+      this[props].Texture4Average.CopyFrom(val);
     }
 
     get Texture5Average(){
@@ -327,7 +327,7 @@ export default (function(){
     }
 
     set Texture5Average(val){
-      this[props].Texture5Average.copyFrom(val);
+      this[props].Texture5Average.CopyFrom(val);
     }
 
     get Texture6Average(){
@@ -335,7 +335,7 @@ export default (function(){
     }
 
     set Texture6Average(val){
-      this[props].Texture6Average.copyFrom(val);
+      this[props].Texture6Average.CopyFrom(val);
     }
 
     get Texture1Shininess(){
@@ -578,6 +578,17 @@ export default (function(){
         throw new Error('FresnelBias must be a number!');
       }
       this[props].FresnelBias = +val;
+    }
+
+    CopyFrom(other){
+      if(!(other instanceof TerrainkMaterialSettings)){
+        throw new Error(
+          'Can only copy from other instances of TerrainkMaterialSettings'
+        );
+      }
+      for(var prop of Object.keys(defaultProps)){
+        this[prop] = other[prop];
+      }
     }
 
     static FromJXON(jxon, obj){

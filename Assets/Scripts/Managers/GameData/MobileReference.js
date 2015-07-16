@@ -165,7 +165,7 @@ export default (function(){
       return this.FullPath.localeCompare(other.FullPath);
     }
 
-    copyFrom(other){
+    CopyFrom(other){
       if(!(other instanceof MobileReference)){
         throw new Error(
           'Can only copy from other instances of MobileReference'

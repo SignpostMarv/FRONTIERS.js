@@ -186,7 +186,7 @@ export default (function(){
       this[props].Faction = val|0;
     }
 
-    copyFrom(other){
+    CopyFrom(other){
       if(!(other instanceof WIFlags)){
         throw new Error('Can only copy from other instances of WIFlags');
       }

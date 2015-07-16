@@ -315,11 +315,11 @@ export default (function(){
       this[props].Credentials5 = val|0;
     }
 
-    copyFrom(other){
+    CopyFrom(other){
       if(!(other instanceof CharacterFlags)){
         throw new Error('Can only copy from other CharacterFlags instances');
       }
-      super.copyFrom(other);
+      super.CopyFrom(other);
       Object.keys(defaultProps).forEach(prop => {
         this[prop] = other[prop];
       });

@@ -179,7 +179,7 @@ export default (function(){
     }
 
     set DisplaySettings(val){
-      this[props].DisplaySettings.copyFrom(val);
+      this[props].DisplaySettings.CopyFrom(val);
     }
 
     static FromJXON(jxon){
