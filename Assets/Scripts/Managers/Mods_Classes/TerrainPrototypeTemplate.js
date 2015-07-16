@@ -1,3 +1,4 @@
+import applyDefaultPropsSpecToObject from '../../../../Utilities/applyDefaultPropsSpecToObject.js';
 import ChunkMode from '../../Global/Enums/ChunkMode.js';
 import PrototypeTemplateType from '../../Global/Enums/PrototypeTemplateType.js';
 import DetailRenderMode from '../../../../Stubs/Unity/DetailRenderMode.js';
@@ -52,9 +53,7 @@ export default (function(){
 
   class TerrainPrototypeTemplate{
     constructor(){
-      for(var prop of Object.keys(defaultProps)){
-        this[prop] = defaultProps[prop]();
-      }
+      applyDefaultPropsSpecToObject(this, props, defaultProps);
     }
 
     get Mode(){

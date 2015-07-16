@@ -3,6 +3,8 @@ import TerrainkMaterialSettings from './TerrainkMaterialSettings.js';
 import SColor from '../../Utilities/SColor.js';
 import Serializable from '../../../../Stubs/Serializable.js';
 import TerrainPrototypeTemplate from './TerrainPrototypeTemplate.js';
+import TerrainTextureTemplate from './TerrainTextureTemplate.js';
+import XmlHelper from '../GameData/XmlHelper.js';
 
 export default (function(){
   'use strict';

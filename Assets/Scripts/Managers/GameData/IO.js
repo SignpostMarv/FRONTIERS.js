@@ -9,6 +9,7 @@ import XmlHelper from './XmlHelper.js';
 import filterOutRootNode from '../../../../Utilities/filterOutRootNode.js';
 import WorldSettings from '../Mods_Classes/WorldSettings.js';
 import ChunkState from '../Mods_Classes/ChunkState.js';
+import ChunkTerrainData from '../Mods_Classes/ChunkTerrainData.js';
 
 export default (function(){
   'use strict';
@@ -308,13 +309,20 @@ export default (function(){
           directory = Path.Combine(dataPath, directoryName),
           path = Path.Combine(directory, (fileName + IO.gDataExtension))
         ;
-
         XmlHelper.Url2JXON(path).then(function(jxon){
           if(Object.keys(jxon).length === 1){
             switch(Object.keys(jxon)[0]){
               case 'ChunkState':
                 resolve(ChunkState.FromJXON(jxon.ChunkState));
+                return;
+              case 'ChunkTerrainData':
+                resolve(ChunkTerrainData.FromJXON(jxon.ChunkTerrainData));
+                return;
             }
+            reject([
+              'presently unsupported!',
+              Object.keys(jxon)[0]
+            ]);
           }else{
             console.error(jxon);
             reject(new Error('Cannot autodiscover multi-key loader'));

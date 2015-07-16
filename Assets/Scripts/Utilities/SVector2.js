@@ -1,3 +1,5 @@
+import XmlHelper from '../Managers/GameData/XmlHelper.js';
+
 export default (function(){
   'use strict';
 
@@ -52,6 +54,18 @@ export default (function(){
 
     static get one(){
       return new SVector2(1, 1);
+    }
+
+    static FromJXON(jxon){
+      return XmlHelper.JXON2Type(
+        jxon,
+        null,
+        SVector2,
+        [
+          'x',
+          'y',
+        ]
+      );
     }
   }
 
