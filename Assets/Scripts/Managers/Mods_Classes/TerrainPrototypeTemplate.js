@@ -36,10 +36,10 @@ export default (function(){
         return +2.5;
       },
       HealthyColor: function(){
-        return SColor.white;
+        return SColor.White;
       },
       DryColor: function(){
-        return SColor.white;
+        return SColor.White;
       },
       UsePrototypeMesh: function(){
         return false;
@@ -197,7 +197,6 @@ export default (function(){
           ));
           return;
         }
-        console.log(jxon);
         var
           enumProps = {
             Mode: ChunkMode,

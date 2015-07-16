@@ -45,9 +45,6 @@ export default (function(){
       PassThroughChunkData: function(){
         return false;
       },
-      HeightMapTiler: function(){
-        return undefined;
-      }
     }
   ;
 
@@ -91,7 +88,14 @@ export default (function(){
 
     set SplatmapGroundTypes(val){
       if(!(val instanceof Array)){
+        if(
+          typeof(val) === 'string' &&
+          val === ''
+        ){
+          val = [];
+        }else{
         throw new Error('SplatmapGroundTypes must be instanceof Array');
+        }
       }
       this[props].SplatmapGroundTypes = val;
     }
@@ -151,7 +155,16 @@ export default (function(){
 
     set DetailTemplates(val){
       if(!(val instanceof Array)){
+        if(
+          typeof(val) === 'object' &&
+          Object.keys(val).length === 1 &&
+          Object.keys(val)[0] === 'TerrainPrototypeTemplate' &&
+          val.TerrainPrototypeTemplate instanceof Array
+        ){
+          val = val.TerrainPrototypeTemplate;
+        }else{
         throw new Error('DetailTemplates must be instanceof Array');
+        }
       }
       this[props].DetailTemplates = val;
     }
@@ -162,8 +175,16 @@ export default (function(){
 
     set TreeTemplates(val){
       if(!(val instanceof Array)){
-        console.error(val);
+        if(
+          typeof(val) === 'object' &&
+          Object.keys(val).length === 1 &&
+          Object.keys(val)[0] === 'TerrainPrototypeTemplate' &&
+          val.TerrainPrototypeTemplate instanceof Array
+        ){
+          val = val.TerrainPrototypeTemplate;
+        }else{
         throw new Error('TreeTemplates must be an instanceof Array');
+        }
       }
       this[props].TreeTemplates = val;
     }
@@ -174,8 +195,16 @@ export default (function(){
 
     set TextureTemplates(val){
       if(!(val instanceof Array)){
-        console.error(val);
+        if(
+          typeof(val) === 'object' &&
+          Object.keys(val).length === 1 &&
+          Object.keys(val)[0] === 'TerrainTextureTemplate' &&
+          val.TerrainTextureTemplate instanceof Array
+        ){
+          val = val.TerrainTextureTemplate;
+        }else{
         throw new Error('TextureTemplates must be an instanceof Array');
+        }
       }
       this[props].TextureTemplates = val;
     }
@@ -189,97 +218,33 @@ export default (function(){
     }
 
     static FromJXON(jxon, obj){
-      return new Promise(function(resolve, reject){
-        if(obj === undefined){
-          obj = new ChunkTerrainData();
-        }else if(!(obj instanceof ChunkTerrainData)){
-          reject(new Error(
-            'Supplied object must be an instanceof ChunkTerrainData'
-          ));
-          return;
-        }
-        if(!('ChunkTerrainData' in jxon)){
-          reject('ChunkTerrainData not present in JXON object!');
-          return;
-        }
-        for(var prop of [
+      return XmlHelper.JXON2Type(
+        jxon,
+        null,
+        ChunkTerrainData,
+        [
           'HeightmapResolution',
           'HeightmapHeight',
+          'SplatmapGroundTypes',
           'WindSpeed',
           'WindSize',
           'WindBending',
-          'PassThroughChunkData'
-        ]){
-          obj[prop] = jxon.ChunkTerrainData[prop];
+          'TextureTemplates',
+          'PassThroughChunkData',
+        ],
+        {
+          MaterialSettings: TerrainkMaterialSettings,
+          GrassTint: SColor,
+        },
+        [
+        ],
+        {
+          DetailTemplates: TerrainPrototypeTemplate,
+          TreeTemplates: TerrainPrototypeTemplate,
+          TextureTemplates: TerrainTextureTemplate,
         }
-        for(prop of [
-          'SplatmapGroundTypes'
-        ]){
-          if(jxon.ChunkTerrainData[prop] !== ''){
-            obj[prop] = jxon.ChunkTerrainData[prop];
-          }else{
-            obj[prop] = [];
-          }
-        }
-        var
-          promiseStack = [
-            TerrainkMaterialSettings.FromJXON(
-              jxon.ChunkTerrainData.MaterialSettings,
-              obj.MaterialSettings
-            ),
-            Mod.FromJXON(jxon.ChunkTerrainData, obj)
-          ],
-          map_TerrainPrototypeTemplate = function(e){
-            return TerrainPrototypeTemplate.fromJXON(e);
-          },
-          handle_templates = function(templateObj){
-            var
-              promiseRejectShim = false
-            ;
-
-            for(var detailTemplate of Object.keys(templateObj)){
-              if(promiseRejectShim){
-                return;
-              }
-              switch(detailTemplate){
-                case 'TerrainPrototypeTemplate':
-                  if(templateObj.TerrainPrototypeTemplate instanceof Array){
-                    promiseStack.push(
-                      Promise.all(
-                        templateObj.TerrainPrototypeTemplate.map(
-                          map_TerrainPrototypeTemplate
-                        )
-                      )
-                    );
-                  }else{
-                    promiseStack.push(
-                      TerrainPrototypeTemplate.fromJXON(
-                        templateObj.TerrainPrototypeTemplate
-                      )
-                    );
-                  }
-                break;
-                default:
-                  reject(Error('Unsupported DetailTemplate type!'));
-                  promiseRejectShim = true;
-                break;
-              }
-            }
-          }
-        ;
-        if(
-          typeof(jxon.DetailTemplates) === 'object'
-        ){
-          handle_templates(jxon.DetailTemplates);
-        }
-        if(
-          typeof(jxon.TreeTemplates) === 'object'
-        ){
-          handle_templates(jxon.TreeTemplates);
-        }
-        Promise.all(promiseStack).then(function(){
-          resolve(obj);
-        }, reject);
+      ).then(function(typeInstance){
+        return Mod.FromJXON(jxon, typeInstance);
       });
     }
 

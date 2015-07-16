@@ -95,60 +95,6 @@ export default (function(){
         resolve(typeInstance);
       });
     },
-/*
-    applyFromJXONArray = function(jxon, typeInstance, expectingFromJxonAray){
-      return new Promise(function(resolve, reject){
-        if(
-          !expectingFromJxonAray ||
-          expectingFromJxonAray.length === 0
-        ){
-          resolve(typeInstance);
-          return;
-        }
-        console.log('calling applyFromJXONArray', jxon, expectingFromJxonAray);
-        Promise.all(Object.keys(expectingFromJxonAray).map(function(arrayProp){
-          return new Promise(function(res, rej){
-            if(jxon[arrayProp] instanceof Array){
-              Promise.all(jxon[arrayProp].map(function(arrayedJxon){
-                console.log(
-                  'setting up',
-                  jxon[arrayProp][arrayedJxon],
-                  expectingFromJxonAray[arrayProp]
-                );
-                return expectingFromJxonAray[arrayProp].FromJXON(
-                  jxon[arrayProp][arrayedJxon]
-                );
-              })).then(function(values){
-                console.log('zomg wtf', arrayProp, values);
-              }, function(failure){
-                console.error('failure for', arrayProp, failure);
-                rej(failure);
-              });
-            }else{
-              var
-                jxonArrayPropKeys = Object.keys(jxon[arrayProp])
-              ;
-              Promise.all(jxonArrayPropKeys.map(function(arrayedJxon){
-                return expectingFromJxonAray[arrayProp].FromJXON(
-                  jxon[arrayProp][arrayedJxon]
-                );
-              })).then(function(values){
-                var
-                  i = 0|0
-                ;
-                for(i=0;i<values.length;++i){
-                  typeInstance[jxonArrayPropKeys[i]] = values[i];
-                }
-                res(typeInstance);
-              }, rej);
-            }
-          });
-        })).then(function(){
-          resolve(typeInstance);
-        }).catch(reject);
-      });
-    }
-*/
     applyFromJXONArray = function(jxon, typeInstance, spec){
       return new Promise(function(resolve){
         if(!spec){

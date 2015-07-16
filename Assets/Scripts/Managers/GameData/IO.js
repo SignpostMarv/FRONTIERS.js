@@ -285,7 +285,6 @@ export default (function(){
                 'WorldSettings'
               ).then(function(jxon){
                 WorldSettings.FromJXON(jxon).then(function(resp){
-                  console.log(resp);
                   resolve(resp);
                 });
               });

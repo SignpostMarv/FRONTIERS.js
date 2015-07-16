@@ -127,7 +127,6 @@ export default (function(){
                 new self[props].typeProp(u8b.buffer)
               ;
             }else{
-              console.log('endianness matches');
               self[props].TypedArrayProp = new self[props].typeProp(buffer);
             }
             resolve(self[props].TypedArrayProp);
@@ -201,7 +200,7 @@ export default (function(){
           sourceEndianness
         );
       }else{
-        console.log('reusing heightmap obj');
+        console.info('reusing heightmap obj');
       }
       return cachedHeightmaps[cacheKey];
     }
@@ -219,7 +218,7 @@ export default (function(){
           return;
         }
         fetch(url).then(function(response){
-          console.log('fresh fetch', url);
+          console.info('fresh fetch', url);
           resolve(response);
         }, function(failure){
           self[props].pendingFetch = null;

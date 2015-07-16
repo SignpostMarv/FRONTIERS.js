@@ -57,7 +57,6 @@ export default (function(){
 
     fromInt(val){
       if(typeof(val) !== 'number'){
-        console.log(this, val);
         throw new Error('Argument 1 must be a number!');
       }
       val = val|0;
@@ -88,7 +87,6 @@ export default (function(){
         })
       ;
       if(enumProps.length < 1){
-        console.log( Object.getOwnPropertyDescriptor(con, Object.getOwnPropertyNames(con)[7]).get() === val, val);
         throw new Error('Cannot instantiate from number!');
       }
 
