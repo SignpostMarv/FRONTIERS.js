@@ -1,0 +1,12 @@
+div{
+  display: inline-block ;
+  position: relative ;
+}
+div::after{
+  position: absolute;
+  content: attr(title);
+  text-shadow: 0 0 .125em #fff;
+  left: 0;
+  color: #000;
+  padding: 1em;
+}
