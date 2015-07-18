@@ -257,7 +257,7 @@ export default (function(){
                 tile.width - 1,
                 tile.height - 1
               ),
-              material = new THREE.MeshBasicMaterial({
+              material = new THREE.MeshPhongMaterial({
                 color: 0xffff00,
                 side: THREE.DoubleSide,
               }),
