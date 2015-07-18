@@ -1,8 +1,8 @@
 onFrontiersReady(function(){
   'use strict';
-  function setDisabled(isDisabled){
+  function setDisabled(queryOn, isDisabled){
     var
-      disabledStuffs = this.querySelectorAll('*[disabled]'),
+      disabledStuffs = queryOn.querySelectorAll('*[disabled]'),
       i = 0|0
     ;
     for(i=0;i<disabledStuffs.length;++i){
@@ -23,7 +23,7 @@ onFrontiersReady(function(){
   path.push('Data');
   path.unshift(location.hostname);
   directory.value = location.protocol + '//' + path.join('/');
-  setDisabled.call(form, false);
+  setDisabled(form, false);
   xTiles.addEventListener('change', function(){
     xTilesOut.textContent = this.value;
   });
@@ -59,13 +59,13 @@ onFrontiersReady(function(){
       alert('tiles must be power of two!');
       return;
     }
-    setDisabled.call(this, true);
+    setDisabled(this, true);
     Frontiers.Data.GameData.IO.InitializeSystemPaths(
       directory.value
     ).catch(function(e){
       alert('Error!');
       console.error(e);
-    }).then(function(e){
+    }).then(function(){
       var
         tables = document.querySelectorAll('body > table'),
         i=0|0

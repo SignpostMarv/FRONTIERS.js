@@ -1,9 +1,9 @@
 onFrontiersReady(function(){
   'use strict';
   console.log('FRONTIERS.JS is loaded!');
-  function setDisabled(isDisabled){
+  function setDisabled(queryOn, isDisabled){
     var
-      disabledStuffs = this.querySelectorAll('*[disabled]'),
+      disabledStuffs = queryOn.querySelectorAll('*[disabled]'),
       i = 0|0
     ;
     for(i=0;i<disabledStuffs.length;++i){
@@ -27,7 +27,7 @@ onFrontiersReady(function(){
   path.push('Data');
   path.unshift(location.hostname);
   directory.value = location.protocol + '//' + path.join('/');
-  setDisabled.call(form, false);
+  setDisabled(form, false);
   function doStuff(){
     if(
       (resolution.value & (resolution.value - 1)) !== 0
@@ -35,7 +35,7 @@ onFrontiersReady(function(){
       alert('resolution must be power of two!');
       return;
     }
-    setDisabled.call(form, true);
+    setDisabled(form, true);
     while(texturesGoHere.hasChildNodes()){
       texturesGoHere.removeChild(texturesGoHere.firstChild);
     }
@@ -44,7 +44,7 @@ onFrontiersReady(function(){
     ).catch(function(e){
       alert('Error!');
       console.error(e);
-    }).then(function(e){
+    }).then(function(){
       Frontiers.Data.GameData.IO.LoadWorld('FRONTIERS').then(function(world){
         Promise.all(world.DefaultRevealedLocations.map(
           function(revealedLocation){
@@ -73,14 +73,14 @@ onFrontiersReady(function(){
           for(var div of divs){
             texturesGoHere.appendChild(div);
           }
-          setDisabled.call(form, false);
+          setDisabled(form, false);
         }, failureLogger);
       });
     });
   }
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    setDisabled.call(this, true);
+    setDisabled(this, true);
     doStuff();
   });
   resolution.addEventListener('change', function(){

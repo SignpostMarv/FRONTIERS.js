@@ -114,10 +114,15 @@ module.exports = function(grunt) {
       },
       Examples: {
         options: {
+          esnext: true,
           browser: true,
           globals: {
             System: true,
             console: true,
+            alert: true,
+            Frontiers: true,
+            onFrontiersReady: true,
+            THREE: true,
           },
         },
         src: [

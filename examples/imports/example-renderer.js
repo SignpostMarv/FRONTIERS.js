@@ -28,7 +28,10 @@ onFrontiersReady(function(){
       Promise.all(world.DefaultRevealedLocations.map(function(revealedLocation){
         return renderer.AddObject(revealedLocation);
       })).then(function(revealedLocations){
-        console.log('should be done now');
+        console.log(
+          'should be done now',
+          revealedLocations
+        );
         renderer.Play();
         renderer.Camera.position.x = 15000;
         renderer.Camera.position.z = 15000;

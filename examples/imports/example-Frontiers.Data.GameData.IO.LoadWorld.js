@@ -1,9 +1,9 @@
 onFrontiersReady(function(){
   'use strict';
   console.log('FRONTIERS.JS is loaded!');
-  function setDisabled(isDisabled){
+  function setDisabled(queryOn, isDisabled){
     var
-      disabledStuffs = this.querySelectorAll('*[disabled]'),
+      disabledStuffs = queryOn.querySelectorAll('*[disabled]'),
       i = 0|0
     ;
     for(i=0;i<disabledStuffs.length;++i){
@@ -20,14 +20,14 @@ onFrontiersReady(function(){
   path.push('Data');
   path.unshift(location.hostname);
   directory.value = location.protocol + '//' + path.join('/');
-  setDisabled.call(form, false);
+  setDisabled(form, false);
   function doStuff(){
     Frontiers.Data.GameData.IO.InitializeSystemPaths(
       directory.value
     ).catch(function(e){
       alert('Error!');
       console.error(e);
-    }).then(function(e){
+    }).then(function(){
       Frontiers.Data.GameData.IO.LoadWorld('FRONTIERS').then(function(world){
         Promise.all(world.DefaultRevealedLocations.map(
           function(revealedLocation){
@@ -95,7 +95,7 @@ onFrontiersReady(function(){
   }
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    setDisabled.call(this, true);
+    setDisabled(this, true);
     doStuff();
   });
   doStuff();
