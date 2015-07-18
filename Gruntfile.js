@@ -98,6 +98,33 @@ module.exports = function(grunt) {
           'Utilities/*.js',
         ]
       },
+      Renderers: {
+        options: {
+          esnext: true,
+          browser: true,
+          globals: {
+            console: true,
+            THREE: true,
+            Frontiers: true,
+          }
+        },
+        src: [
+          'Renderers/*.js',
+        ]
+      },
+      Examples: {
+        options: {
+          browser: true,
+          globals: {
+            System: true,
+            console: true,
+          },
+        },
+        src: [
+          'examples/imports/*.js',
+          '!examples/imports/babel-browser.min.js',
+        ],
+      },
     },
     watch: {
       gruntfile: {
@@ -112,6 +139,8 @@ module.exports = function(grunt) {
           '<%= jshint.Shims.src %>',
           '<%= jshint.Utilities.src %>',
           '<%= jshint.Namespaced.src %>',
+          '<%= jshint.Renderers.src %>',
+          '<%= jshint.Examples.src %>',
         ],
         tasks: [
           'jshint:FRONTIERS',
@@ -120,6 +149,8 @@ module.exports = function(grunt) {
           'jshint:Stubs',
           'jshint:Utilities',
           'jshint:Namespaced',
+          'jshint:Renderers',
+          'jshint:Examples',
         ]
       }
     }

@@ -16,5 +16,8 @@
   ],
   "dependencies": {
     "jxon": "~1.4.0"
+  },
+  "devDependencies": {
+    "three.js": "mrdoob/three.js#r71"
   }
 }

@@ -1,5 +1,6 @@
 import Data from './Frontiers/Data.js';
 import World from './Frontiers/World.js';
+import Renderers from './non-transposed/Renderers.js';
 
 export default (function(){
   'use strict';
@@ -14,6 +15,9 @@ export default (function(){
       return World;
     }
 
+    static get Renderers(){
+      return Renderers;
+    }
   }
 
   return Frontiers;
