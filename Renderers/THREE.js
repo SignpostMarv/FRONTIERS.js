@@ -251,6 +251,7 @@ export default (function(){
         return function(tile){
           return tile.TypedArray().then(function(typed){
             var
+              materialSettings = resp[2].MaterialSettings,
               geometry = new THREE.PlaneBufferGeometry(
                 1,
                 1,
@@ -258,7 +259,8 @@ export default (function(){
                 tile.height - 1
               ),
               material = new THREE.MeshPhongMaterial({
-                color: 0xffff00,
+                color: parseInt(materialSettings.TerrainSpecColor, 16),
+                shininess: materialSettings.TerrainSpecPower * 100,
                 side: THREE.DoubleSide,
               }),
               mesh = new THREE.Mesh(geometry, material)
