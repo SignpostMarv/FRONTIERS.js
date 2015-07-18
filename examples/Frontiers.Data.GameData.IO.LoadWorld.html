@@ -1,12 +1,7 @@
 <!doctype html>
 <html>
 <head>
-<script src="./babel-browser.min.js"></script>
-<script src="../node_modules/es6-module-loader/dist/es6-module-loader-dev.js"></script>
-<script src="../bower_components/jxon/index.js"></script>
-<script>
-System.transpiler = 'babel';
-</script>
+<link rel="import" href="imports/onFrontiersReady.html">
 <style>
 div{
   display: inline-block ;
@@ -23,13 +18,9 @@ div::after{
 </style>
 </head>
 <body>
-<script>
-'use strict';
-System.import(
-  '../FRONTIERS.js'
-).then(function(Frontiers){
-  Frontiers = Frontiers.default;
-  window.Frontiers = Frontiers;
+<script defer async>
+onFrontiersReady(function(){
+  'use strict';
   console.log('FRONTIERS.JS is loaded!');
   function setDisabled(isDisabled){
     var
