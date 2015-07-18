@@ -64,7 +64,7 @@ export default function(sx, sz, sw, sh){
         'Requesting a new tile that exactly matches the source tile.'
       );
       self.TypedArray().then(function(typedArray){
-        resolve(new FetchTileFromTypedArray(typedArray, sw, sh));
+        resolve(new FetchTileFromTypedArray(typedArray, sx, sz, sw, sh));
       }, reject);
       return;
     }
@@ -102,7 +102,7 @@ export default function(sx, sz, sw, sh){
           newTypedArray[di] = typedArray[si];
         }
       }
-      resolve(new FetchTileFromTypedArray(newTypedArray, sw, sh));
+      resolve(new FetchTileFromTypedArray(newTypedArray, sx, sz, sw, sh));
     }, reject);
   });
 }

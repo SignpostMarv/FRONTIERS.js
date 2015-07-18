@@ -9,7 +9,7 @@ export default (function(){
   ;
 
   class FetchTileFromTypedArray extends FetchTileFromUtils{
-    constructor(typedSource, width, height){
+    constructor(typedSource, x, y, width, height){
       super();
       if(
         !(typedSource instanceof Float32Array) &&
@@ -45,6 +45,8 @@ export default (function(){
       this[props].TypedArrayProp = typedSource;
       this[props].width = width;
       this[props].height = height;
+      this[props].x = x;
+      this[props].y = y;
     }
 
     get width(){
@@ -53,6 +55,14 @@ export default (function(){
 
     get height(){
       return this[props].height;
+    }
+
+    get x(){
+      return this[props].x;
+    }
+
+    get y(){
+      return this[props].y;
     }
 
     ArrayBuffer(){
