@@ -116,6 +116,11 @@ export default (function(){
               Promise.all(jxon[jxonProp][propKeys[0]].map(function(subJxon){
                 return spec[jxonProp].FromJXON(subJxon);
               })).then(subRes, subRej);
+            }else if(
+              jxon[jxonProp] === '',
+              propKeys.length === 0
+            ){
+              subRes([]);
             }else{
               subRej([
                 'unsupported stuff',

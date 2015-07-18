@@ -4,6 +4,7 @@ import SColor from '../../Utilities/SColor.js';
 import Serializable from '../../../../Stubs/Serializable.js';
 import TerrainPrototypeTemplate from './TerrainPrototypeTemplate.js';
 import TerrainTextureTemplate from './TerrainTextureTemplate.js';
+import GroundType from '../../Global/Enums/GroundType.js';
 import XmlHelper from '../GameData/XmlHelper.js';
 
 export default (function(){
@@ -227,7 +228,6 @@ export default (function(){
         [
           'HeightmapResolution',
           'HeightmapHeight',
-          'SplatmapGroundTypes',
           'WindSpeed',
           'WindSize',
           'WindBending',
@@ -244,6 +244,7 @@ export default (function(){
           DetailTemplates: TerrainPrototypeTemplate,
           TreeTemplates: TerrainPrototypeTemplate,
           TextureTemplates: TerrainTextureTemplate,
+          SplatmapGroundTypes: GroundType,
         }
       ).then(function(typeInstance){
         return Mod.FromJXON(jxon, typeInstance);

@@ -34,6 +34,9 @@ export default (function(){
       return 7|0;
     }
 
+    static FromJXON(jxon){
+      return new Promise(resolve => resolve(new GroundType(jxon)));
+    }
   }
 
   return GroundType;
