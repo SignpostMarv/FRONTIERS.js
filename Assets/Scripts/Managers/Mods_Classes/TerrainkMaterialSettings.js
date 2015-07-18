@@ -1,6 +1,7 @@
 import SColor from '../../Utilities/SColor.js';
 import Material from '../../../../Stubs/Material.js';
 import Mats from '../../../../Stubs/Mats.js';
+import XmlHelper from '../GameData/XmlHelper.js';
 
 export default (function(){
   'use strict';
@@ -591,38 +592,49 @@ export default (function(){
       }
     }
 
-    static FromJXON(jxon, obj){
-      return new Promise(function(resolve, reject){
-        if(obj === undefined){
-          obj = new TerrainkMaterialSettings();
-        }else if(!(obj instanceof TerrainkMaterialSettings)){
-          console.error(obj);
-          reject(new Error(
-            'Supplied object must be instanceof TerrainkMaterialSettings'
-          ));
-          return;
+    static FromJXON(jxon){
+      return XmlHelper.JXON2Type(
+        jxon,
+        null,
+        TerrainkMaterialSettings,
+        [
+          'CombinedNormals12',
+          'CombinedNormals34',
+          'CombinedNormals56',
+          'TerrainSpecPower',
+          'Texture1Shininess',
+          'Texture2Shininess',
+          'Texture3Shininess',
+          'Texture4Shininess',
+          'Texture5Shininess',
+          'Texture6Shininess',
+          'MultiUV',
+          'Desaturation',
+          'SplattingDistance',
+          'Decal1CCStrength',
+          'Decal1Sharpness',
+          'Decal2CCStrength',
+          'Decal2Sharpness',
+          'Splat0Tiling',
+          'Splat1Tiling',
+          'Splat2Tiling',
+          'Splat3Tiling',
+          'Splat4Tiling',
+          'Splat5Tiling',
+          'FresnelIntensity',
+          'FresnelPower',
+          'FresnelBias',
+        ],
+        {
+          TerrainSpecColor: SColor,
+          Texture1Average: SColor,
+          Texture2Average: SColor,
+          Texture3Average: SColor,
+          Texture4Average: SColor,
+          Texture5Average: SColor,
+          Texture6Average: SColor,
         }
-        var
-          promiseStack = []
-        ;
-
-        for(var prop of Object.keys(defaultProps)){
-          if(obj[prop] instanceof SColor){
-            promiseStack.push(SColor.FromJXON(jxon[prop], obj[prop]));
-          }else{
-            obj[prop] = jxon[prop];
-          }
-        }
-
-        if(promiseStack.length > 0){
-          Promise.all(promiseStack).then(function(){
-            resolve(obj);
-          }, reject);
-        }else{
-          resolve(obj);
-        }
-
-      });
+      );
     }
   }
 
