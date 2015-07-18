@@ -285,7 +285,7 @@ export default (function(){
             for(i=0;i<geometry.attributes.uv.array.length;i+=2){
               geometry.attributes.uv.array[i + 0] /= ((resolution - 1) / (tile.width - 1));
               geometry.attributes.uv.array[i + 1] /= ((resolution - 1) / (tile.height - 1));
-              geometry.attributes.uv.array[i + 0] += ((tile.x - 1) / (resolution - 1));
+              geometry.attributes.uv.array[i + 0] += (Math.max(0, tile.x - 1) / (resolution - 1));
               geometry.attributes.uv.array[i + 1] = 1 - geometry.attributes.uv.array[i + 1];
               geometry.attributes.uv.array[i + 1] += ((tile.height - 1) / (resolution - 1)) * ((Math.max(0, tile.y - 1) / (tile.height - 1)) + 1);
               geometry.attributes.uv.array[i + 1] %= 1;
