@@ -1,4 +1,7 @@
 import MobileReference from '../Assets/Scripts/Managers/GameData/MobileReference.js';
+import ChunkState from '../Assets/Scripts/Managers/Mods_Classes/ChunkState.js';
+import IO from '../Assets/Scripts/Managers/GameData/IO.js';
+import DataType from '../Assets/Scripts/Global/Enums/DataType.js';
 
 export default (function(){
   'use strict';
@@ -6,7 +9,9 @@ export default (function(){
   var
     props = Symbol('props'),
     init = Symbol('init'),
-    AddMobileReference = Symbol('AddMobileReference')
+    AddMobileReference = Symbol('AddMobileReference'),
+    LoadColorOverlay = Symbol('LoadColorOverlay'),
+    colorOverlayLoaders = []
   ;
 
   class RendererTHREE{
@@ -277,6 +282,15 @@ export default (function(){
                 Math.floor(i / tile.width) / tile.height
               );
             }
+            for(i=0;i<geometry.attributes.uv.array.length;i+=2){
+              geometry.attributes.uv.array[i + 0] /= ((resolution - 1) / (tile.width - 1));
+              geometry.attributes.uv.array[i + 1] /= ((resolution - 1) / (tile.height - 1));
+              geometry.attributes.uv.array[i + 0] += ((tile.x - 1) / (resolution - 1));
+              geometry.attributes.uv.array[i + 1] = 1 - geometry.attributes.uv.array[i + 1];
+              geometry.attributes.uv.array[i + 1] += ((tile.height - 1) / (resolution - 1)) * ((Math.max(0, tile.y - 1) / (tile.height - 1)) + 1);
+              geometry.attributes.uv.array[i + 1] %= 1;
+            }
+            geometry.attributes.uv.needsUpdate = true;
 
             mesh.scale.x = (tile.width / resolution) * resp[1].SizeX;
             mesh.scale.y = resp[2].HeightmapHeight;
@@ -299,6 +313,15 @@ export default (function(){
                 resp[1].SizeZ * (tile.y / resolution)
               )
             );
+
+
+            renderer[LoadColorOverlay](resp[1], 256).then(function(texture){
+              material.map = texture;
+              material.transparent = true;
+              material.needsUpdate = true;
+            }, function(failure){
+              console.warn('failed to get texture', resp[1], failure);
+            });
 
             return mesh;
           });
@@ -333,6 +356,49 @@ export default (function(){
         resolve(mobileReference);
       }, reject);
     });
+  };
+
+  RendererTHREE.prototype[LoadColorOverlay] = function(chunkState, resolution){
+    if(!(chunkState instanceof ChunkState)){
+      throw new Error(
+        'ChunkState instance must be specified'
+      );
+    }else if(typeof(resolution) !== 'number'){
+      throw new Error(
+        'Resolution must be specified as number'
+      );
+    }else if(resolution % 1 !== 0){
+      throw new Error(
+        'Resolution must be specified as integer'
+      );
+    }
+    resolution = resolution|0;
+    if(!(colorOverlayLoaders[resolution] instanceof WeakMap)){
+      colorOverlayLoaders[resolution] = new WeakMap();
+    }
+    if(!colorOverlayLoaders[resolution].has(chunkState)){
+      colorOverlayLoaders[resolution].set(
+        chunkState,
+        new Promise(function(resolve, reject){
+          IO.LoadTerrainMap(
+            resolution,
+            false,
+            true,
+            chunkState.Name,
+            'ColorOverlay',
+            DataType.World
+          ).then(function(ctx){
+            var
+              texture = new THREE.Texture(ctx.canvas)
+            ;
+            texture.needsUpdate = true;
+            resolve(texture);
+          }, reject);
+        })
+      );
+    }
+
+    return colorOverlayLoaders[resolution].get(chunkState);
   };
 
   return RendererTHREE;
