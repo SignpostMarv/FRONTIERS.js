@@ -174,8 +174,8 @@ export default (function(){
     renderer.setClearColor(0x111111, 1);
     renderer.setSize(this.Width, this.Height);
 
-    scene.fog = new THREE.Fog(0xffffff, 150, 20000);
-    scene.add(new THREE.AmbientLight(0x222222));
+    scene.fog = new THREE.Fog(0x111111, 150, 20000);
+    scene.add(new THREE.AmbientLight(0xffffff));
 
     this[props].Renderer = renderer;
     this[props].Scene = scene;
