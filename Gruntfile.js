@@ -122,6 +122,7 @@ module.exports = function(grunt) {
             alert: true,
             Frontiers: true,
             onFrontiersReady: true,
+            setDisabled: true,
             THREE: true,
           },
         },
