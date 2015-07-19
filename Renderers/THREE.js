@@ -10,8 +10,11 @@ export default (function(){
     props = Symbol('props'),
     init = Symbol('init'),
     AddMobileReference = Symbol('AddMobileReference'),
+    RemoveMobileReference = Symbol('RemoveMobileReference'),
+    GetMobileReferenceObjects = Symbol('GetMobileReferenceObjects'),
     LoadColorOverlay = Symbol('LoadColorOverlay'),
-    colorOverlayLoaders = []
+    colorOverlayLoaders = [],
+    trackedObjects = new WeakMap()
   ;
 
   class RendererTHREE{
@@ -157,11 +160,28 @@ export default (function(){
     }
 
     AddObject(obj){
-      return new Promise((resolve, reject) => {
+      var
+        self = this
+      ;
+      return new Promise(function(resolve, reject){
         if(obj instanceof MobileReference){
-          this[AddMobileReference](obj).then(resolve, reject);
+          self[AddMobileReference](obj).then(resolve, reject);
         }else{
-          this[props].Scene.add(obj);
+          self.Scene.add(obj);
+          resolve(obj);
+        }
+      });
+    }
+
+    RemoveObject(obj){
+      var
+        self = this
+      ;
+      return new Promise(function(resolve, reject){
+        if(obj instanceof MobileReference){
+          self[RemoveMobileReference](obj).then(resolve, reject);
+        }else{
+          self.Scene.remove(obj);
           resolve(obj);
         }
       });
@@ -196,7 +216,9 @@ export default (function(){
     this[props].Camera = camera;
   };
 
-  RendererTHREE.prototype[AddMobileReference] = function(mobileReference){
+  RendererTHREE.prototype[GetMobileReferenceObjects] = function(
+    mobileReference
+  ){
     var
       renderer = this,
       mobileReferenceHandler = function(mobileReference){
@@ -314,7 +336,7 @@ export default (function(){
             ++i;
             j = Math.pow(2, i);
           }
-          geometry.forEach(function(buffgeom, j){
+          geometry.forEach(function(buffgeom){
             for(i=0;i<buffgeom[0].attributes.uv.array.length;i+=2){
               buffgeom[0].attributes.uv.array[i + 0] /= (
                 (resolution - 1) / (tile.width - 1)
@@ -342,9 +364,6 @@ export default (function(){
               var
                 sqrt = Math.sqrt(typed.length)
               ;
-              if(j === 0){
-                console.log(sqrt, tile.width);
-              }
               for(i=0;i<typed.length;++i){
                 buffgeom[0].attributes.position.array[(i * 3) + 0] = (
                   ((i % sqrt) - 1) / (sqrt - 1)
@@ -397,33 +416,69 @@ export default (function(){
         };
       },
       patchesHandler = function(resp){
-        return Promise.all(resp[3].map(function(prom){
-          return new Promise(function(resolve, reject){
-            prom.then(function(patch){
-              requestAnimationFrame(function(){
-                renderer.AddObject(patch).then(function(){
-                  resolve(patch);
-                  renderer.Camera.lookAt(patch.position);
-                });
-              });
-            }, reject);
-          });
-        }));
+        return Promise.all(resp[3]);
       }
     ;
+    if(!trackedObjects.has(mobileReference)){
+      trackedObjects.set(mobileReference, [false]);
+    }
+    if(!trackedObjects.get(mobileReference)[0]){
+      trackedObjects.get(mobileReference)[0] = new Promise(
+        function(resolve, reject){
+          if(trackedObjects.get(mobileReference).length > 1){
+            resolve(trackedObjects.get(mobileReference).slice(1));
+          }else{
+            mobileReferenceHandler(mobileReference).then(
+              chunkStateHandler,
+              reject
+            ).then(
+              chunkTerrainDataHandler,
+              reject
+            ).then(
+              patchesHandler,
+              reject
+            ).then(function(objects){
+              trackedObjects.get(mobileReference).push(objects);
+              resolve(objects);
+            }, reject);
+          }
+        }
+      );
+    }
+    return trackedObjects.get(mobileReference)[0];
+  };
+
+  RendererTHREE.prototype[AddMobileReference] = function(mobileReference){
+    var
+      self = this
+    ;
     return new Promise(function(resolve, reject){
-      mobileReferenceHandler(mobileReference).then(
-        chunkStateHandler,
+      self[GetMobileReferenceObjects](mobileReference).then(
+        function(objects){
+          for(let object of objects){
+            self.AddObject(object);
+          }
+          resolve(mobileReference);
+        },
         reject
-      ).then(
-        chunkTerrainDataHandler,
+      );
+    });
+  };
+
+  RendererTHREE.prototype[RemoveMobileReference] = function(mobileReference){
+    var
+      self = this
+    ;
+    return new Promise(function(resolve, reject){
+      self[GetMobileReferenceObjects](mobileReference).then(
+        function(objects){
+          for(let object of objects){
+            self.RemoveObject(object);
+          }
+          resolve(mobileReference);
+        },
         reject
-      ).then(
-        patchesHandler,
-        reject
-      ).then(function(){
-        resolve(mobileReference);
-      }, reject);
+      );
     });
   };
 

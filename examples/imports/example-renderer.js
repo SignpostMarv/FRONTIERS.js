@@ -25,6 +25,7 @@ onFrontiersReady(function(){
     })()
   ).then(function(){
     Frontiers.Data.GameData.IO.LoadWorld('FRONTIERS').then(function(world){
+      window.world = world;
       Promise.all(world.DefaultRevealedLocations.map(function(revealedLocation){
         return renderer.AddObject(revealedLocation);
       })).then(function(revealedLocations){
