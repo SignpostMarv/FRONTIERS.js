@@ -13,7 +13,7 @@ window.onFrontiersReady = (function(){
       console.error(msg);
     };
     System.import(
-      '../FRONTIERS.js'
+      '../src/FRONTIERS.js'
     ).then(function(Frontiers){
       window.Frontiers = Frontiers.default;
       loaded = true;

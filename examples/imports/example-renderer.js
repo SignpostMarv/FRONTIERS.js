@@ -19,6 +19,7 @@ onFrontiersReady(function(){
       ;
       path.pop();
       path.pop();
+      path.push('src');
       path.push('Data');
       path.unshift(location.hostname);
       return location.protocol + '//' + path.join('/');

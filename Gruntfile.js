@@ -27,7 +27,7 @@ module.exports = function(grunt) {
           esnext: true,
         },
         src: [
-          'FRONTIERS.js',
+          'src/FRONTIERS.js',
         ],
       },
       Namespaced: {
@@ -35,8 +35,8 @@ module.exports = function(grunt) {
           esnext: true,
         },
         src: [
-          '_Namespaced/*.js',
-          '_Namespaced/*/*.js',
+          'src/_Namespaced/*.js',
+          'src/_Namespaced/*/*.js',
         ],
       },
       Assets: {
@@ -51,11 +51,11 @@ module.exports = function(grunt) {
           }
         },
         src: [
-          'Assets/*.js',
-          'Assets/*/*.js',
-          'Assets/*/*/*.js',
-          'Assets/*/*/*/*.js',
-          'Assets/*/*/*/*/*.js',
+          'src/Assets/*.js',
+          'src/Assets/*/*.js',
+          'src/Assets/*/*/*.js',
+          'src/Assets/*/*/*/*.js',
+          'src/Assets/*/*/*/*/*.js',
         ],
       },
       Shims: {
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
           }
         },
         src: [
-          'Shims/*.js',
+          'src/Shims/*.js',
         ]
       },
       Stubs: {
@@ -80,9 +80,9 @@ module.exports = function(grunt) {
           }
         },
         src: [
-          'Stubs/*.js',
-          'Stubs/*/*.js',
-          'Stubs/*/*/*.js',
+          'src/Stubs/*.js',
+          'src/Stubs/*/*.js',
+          'src/Stubs/*/*/*.js',
         ]
       },
       Utilities: {
@@ -95,7 +95,7 @@ module.exports = function(grunt) {
           }
         },
         src: [
-          'Utilities/*.js',
+          'src/Utilities/*.js',
         ]
       },
       Renderers: {
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
           }
         },
         src: [
-          'Renderers/*.js',
+          'src/Renderers/*.js',
         ]
       },
       Examples: {

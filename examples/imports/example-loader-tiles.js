@@ -11,6 +11,7 @@ onFrontiersReady(function(){
   ;
   path.pop();
   path.pop();
+  path.push('src');
   path.push('Data');
   path.unshift(location.hostname);
   directory.value = location.protocol + '//' + path.join('/');
