@@ -128,6 +128,13 @@ export default (function(){
       ;
       this.Controls.update(delta);
 
+      this[props].Scene.updateMatrixWorld();
+      this[props].Scene.traverse(object => {
+        if(object instanceof THREE.LOD){
+          object.update(this[props].Camera);
+        }
+      });
+
       this[props].Renderer.render(
         this[props].Scene,
         this[props].Camera
@@ -178,9 +185,11 @@ export default (function(){
 
     renderer.setClearColor(0x111111, 1);
     renderer.setSize(this.Width, this.Height);
+    renderer.sortObjects = false;
 
     scene.fog = new THREE.Fog(0x111111, 150, 20000);
     scene.add(new THREE.AmbientLight(0xffffff));
+    scene.autoUpdate = false;
 
     this[props].Renderer = renderer;
     this[props].Scene = scene;
@@ -228,7 +237,7 @@ export default (function(){
             tilePromises = [],
             tileHandler = makeTileHandler(resp)
           ;
-          numTiles = (resolution - 1) / 16;
+          numTiles = (resolution - 1) / 32;
           tileSize = ((resolution - 1) / numTiles) + 1;
           for(z=0;z<numTiles;++z){
             for(x=0;x<numTiles;++x){
@@ -254,88 +263,137 @@ export default (function(){
           resolution = resp[2].HeightmapResolution
         ;
         return function(tile){
-          return tile.TypedArray().then(function(typed){
-            var
-              materialSettings = resp[2].MaterialSettings,
-              geometry = new THREE.PlaneBufferGeometry(
-                1,
-                1,
-                tile.width - 1,
-                tile.height - 1
-              ),
-              material = new THREE.MeshPhongMaterial({
-                color: parseInt(materialSettings.TerrainSpecColor, 16),
-                shininess: materialSettings.TerrainSpecPower * 100,
-                side: THREE.DoubleSide,
-              }),
-              mesh = new THREE.Mesh(geometry, material)
-            ;
-
-            for(var i=0;i<typed.length;++i){
-              geometry.attributes.position.array[(i * 3) + 0] = (
-                (i % tile.width) / tile.width
-              );
-              geometry.attributes.position.array[(i * 3) + 1] = (
-                (typed[i] / 0xffff)
-              );
-              geometry.attributes.position.array[(i * 3) + 2] = (
-                Math.floor(i / tile.width) / tile.height
-              );
+          var
+            lod = new THREE.LOD(),
+            materialSettings = resp[2].MaterialSettings,
+            material = new THREE.MeshPhongMaterial({
+              color: parseInt(materialSettings.TerrainSpecColor, 16),
+              shininess: materialSettings.TerrainSpecPower * 100,
+              side: THREE.DoubleSide,
+            }),
+            geometry = [],
+            i = 0|0,
+            j = Math.pow(2, i),
+            typed = tile.TypedArray()
+          ;
+          while(((tile.width - 1) / j) > 1){
+            if(i === 1){
+              typed = tile.Downsample();
+            }else if(i > 1){
+              typed = typed.then(function(ds){
+                return ds.Downsample();
+              });
             }
-            for(i=0;i<geometry.attributes.uv.array.length;i+=2){
-              geometry.attributes.uv.array[i + 0] /= (
+            var
+              buffgeom = new THREE.PlaneBufferGeometry(
+                1,
+                1,
+                (tile.width - 1) / j,
+                (tile.width - 1) / j
+              ),
+              geomArr = [
+                buffgeom,
+                50 + Math.pow(2, j),
+                new THREE.Mesh(buffgeom, material),
+                typed,
+              ]
+            ;
+            geometry.push(geomArr);
+            if(i > 0){
+              geomArr[3] = geomArr[3].then(function(ds){
+                return ds.TypedArray();
+              });
+            }
+            geomArr[2].scale.x = (
+              ((tile.width - 1) / (resolution - 1)) * resp[1].SizeX
+            );
+            geomArr[2].scale.y = resp[2].HeightmapHeight;
+            geomArr[2].scale.z = (
+              ((tile.height - 1) / (resolution - 1)) * resp[1].SizeZ
+            );
+            ++i;
+            j = Math.pow(2, i);
+          }
+          geometry.forEach(function(buffgeom, j){
+            for(i=0;i<buffgeom[0].attributes.uv.array.length;i+=2){
+              buffgeom[0].attributes.uv.array[i + 0] /= (
                 (resolution - 1) / (tile.width - 1)
               );
-              geometry.attributes.uv.array[i + 1] /= (
+              buffgeom[0].attributes.uv.array[i + 1] /= (
                 (resolution - 1) / (tile.height - 1)
               );
-              geometry.attributes.uv.array[i + 0] += (
+              buffgeom[0].attributes.uv.array[i + 0] += (
                 Math.max(0, tile.x - 1) / (resolution - 1)
               );
-              geometry.attributes.uv.array[i + 1] = (
-                1 - geometry.attributes.uv.array[i + 1]
+              buffgeom[0].attributes.uv.array[i + 1] = (
+                1 - buffgeom[0].attributes.uv.array[i + 1]
               );
-              geometry.attributes.uv.array[i + 1] += (
+              buffgeom[0].attributes.uv.array[i + 1] += (
                 ((tile.height - 1) / (resolution - 1)) *
                 ((Math.max(0, tile.y - 1) / (tile.height - 1)) + 1)
               );
-              geometry.attributes.uv.array[i + 1] %= 1;
+              buffgeom[0].attributes.uv.array[i + 1] %= 1;
             }
-            geometry.attributes.uv.needsUpdate = true;
-
-            mesh.scale.x = (tile.width / resolution) * resp[1].SizeX;
-            mesh.scale.y = resp[2].HeightmapHeight;
-            mesh.scale.z = (tile.height / resolution) * resp[1].SizeZ;
-            mesh.position.x = (
-              (resp[1].XTilePosition * resp[1].SizeX) +
-              resp[1].TileOffset.x +
-              (
-                resp[1].SizeX * (tile.x / resolution)
-              )
-            );
-            mesh.position.y = (
-              resp[1].YOffset +
-              resp[1].TileOffset.y
-            );
-            mesh.position.z = (
-              (resp[1].ZTilePosition * resp[1].SizeZ) +
-              resp[1].TileOffset.z +
-              (
-                resp[1].SizeZ * (tile.y / resolution)
-              )
-            );
-
-
-            renderer[LoadColorOverlay](resp[1], 256).then(function(texture){
-              material.map = texture;
-              material.transparent = true;
-              material.needsUpdate = true;
-            }, function(failure){
-              console.warn('failed to get texture', resp[1], failure);
+            buffgeom[0].attributes.uv.needsUpdate = true;
+            buffgeom[2].updateMatrix();
+            buffgeom[2].autoUpdate = false;
+            lod.addLevel(buffgeom[2], buffgeom[1]);
+            buffgeom[3].then(function(typed){
+              var
+                sqrt = Math.sqrt(typed.length)
+              ;
+              if(j === 0){
+                console.log(sqrt, tile.width);
+              }
+              for(i=0;i<typed.length;++i){
+                buffgeom[0].attributes.position.array[(i * 3) + 0] = (
+                  ((i % sqrt) - 1) / (sqrt - 1)
+                );
+                buffgeom[0].attributes.position.array[(i * 3) + 1] = (
+                  (typed[i] / 0xffff)
+                );
+                buffgeom[0].attributes.position.array[(i * 3) + 2] = (
+                  (Math.floor((i / sqrt) - 1) / (sqrt - 1))
+                );
+              }
+              buffgeom[2].updateMatrix();
             });
-
-            return mesh;
           });
+
+          lod.position.x = (
+            (resp[1].XTilePosition * resp[1].SizeX) +
+            resp[1].TileOffset.x +
+            (
+              resp[1].SizeX * (tile.x / resolution)
+            )
+          );
+          lod.position.y = (
+            resp[1].YOffset +
+            resp[1].TileOffset.y
+          );
+          lod.position.z = (
+            (resp[1].ZTilePosition * resp[1].SizeZ) +
+            resp[1].TileOffset.z +
+            (
+              resp[1].SizeZ * (tile.y / resolution)
+            )
+          );
+          lod.updateMatrix();
+          lod.matrixAutoUpdate = false;
+
+
+          renderer[LoadColorOverlay](resp[1], 512).then(function(texture){
+            material.map = texture;
+            material.transparent = true;
+            material.needsUpdate = true;
+            for(var buffgeom of geometry){
+              buffgeom[2].needsUpdate = true;
+            }
+          }, function(failure){
+            console.warn('failed to get texture', resp[1], failure);
+          });
+
+          return lod;
         };
       },
       patchesHandler = function(resp){
