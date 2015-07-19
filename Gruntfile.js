@@ -1,5 +1,6 @@
 /*global module:false*/
 module.exports = function(grunt) {
+module.require('load-grunt-tasks')(grunt);
 
   // Project configuration.
   grunt.initConfig({
@@ -124,6 +125,7 @@ module.exports = function(grunt) {
             onFrontiersReady: true,
             setDisabled: true,
             THREE: true,
+            require: true,
           },
         },
         src: [
@@ -131,6 +133,53 @@ module.exports = function(grunt) {
           '!examples/imports/babel-browser.min.js',
         ],
       },
+    },
+    babel: {
+      options: {
+        sourceMap: true,
+        modules: 'amd',
+      },
+      build: {
+        files: [{
+          expand: true,
+          src: [
+            '<%= jshint.FRONTIERS.src %>',
+            '<%= jshint.Assets.src %>',
+            '<%= jshint.Stubs.src %>',
+            '<%= jshint.Shims.src %>',
+            '<%= jshint.Utilities.src %>',
+            '<%= jshint.Namespaced.src %>',
+            '<%= jshint.Renderers.src %>',
+          ],
+          dest: 'build/es5',
+          ext: '.js',
+        }]
+      }
+    },
+    requirejs: {
+      build: {
+        options: {
+          baseUrl: 'build/es5/src',
+          name: 'FRONTIERS',
+          out: 'build/es5.FRONTIERS.js',
+
+      done: function(done, output) {
+        var duplicates = require('rjs-build-analysis').duplicates(output);
+
+        if (Object.keys(duplicates).length > 0) {
+          grunt.log.subhead('Duplicates found in requirejs build:');
+          for (var key in duplicates) {
+            grunt.log.error(duplicates[key] + ": " + key);
+          }
+          return done(new Error('r.js built duplicate modules, please check the excludes option.'));
+        } else {
+          grunt.log.success("No duplicates found!");
+        }
+
+        done();
+      }
+        }
+      }
     },
     watch: {
       gruntfile: {
@@ -161,10 +210,6 @@ module.exports = function(grunt) {
       }
     }
   });
-
-  // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task.
   grunt.registerTask('default', [

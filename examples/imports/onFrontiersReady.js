@@ -1,4 +1,3 @@
-System.transpiler = 'babel';
 window.onFrontiersReady = (function(){
   'use strict';
   var
@@ -12,12 +11,10 @@ window.onFrontiersReady = (function(){
     err = err || function(msg){
       console.error(msg);
     };
-    System.import(
-      '../src/FRONTIERS.js'
-    ).then(function(Frontiers){
-      window.Frontiers = Frontiers.default;
+    require(['FRONTIERS'], function(FRONTIERS){
+      window.Frontiers = FRONTIERS;
       loaded = true;
       cb();
-    }, err);
+    });
   };
 })();
