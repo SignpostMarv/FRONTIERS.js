@@ -1,5 +1,6 @@
 import FetchTileFromUtils from './FetchTileFromUtils.js';
 import GetTile from './GetTile.js';
+import Interpolation from './Interpolation.js';
 
 export default (function(){
   'use strict';
@@ -87,6 +88,33 @@ export default (function(){
 
     GetTile(sx, sz, sw, sh){
       return GetTile.call(this, sx, sz, sw, sh);
+    }
+
+    Downsample(){
+      var
+        self = this
+      ;
+      return new Promise(function(resolve, reject){
+        self.TypedArray().then(
+          function(matrix){
+            if(Math.sqrt(matrix.length) % 1 !== 0){
+              reject(new Error('Can only downsample square tiles'));
+            }else{
+              return matrix;
+            }
+          }
+        ).then(
+          Interpolation.downsampleSquareMatrix
+        ).then(function(downsampled){
+          resolve(new FetchTileFromTypedArray(
+            downsampled,
+            self.x,
+            self.y,
+            ((self.width - 1) / 2) + 1,
+            ((self.height - 1) / 2) + 1
+          ));
+        }, reject);
+      });
     }
   }
 
