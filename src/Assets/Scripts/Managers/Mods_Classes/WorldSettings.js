@@ -428,6 +428,70 @@ export default (function(){
       this[props].FirstStartupPosition = (val + '');
     }
 
+    toJSON(){
+      var
+        obj = {}
+      ;
+      [
+        'Name',
+        'Description',
+        'Type',
+        'Dependencies',
+        'Version',
+        'DispalyOrder',
+        'ListInAvailable',
+        'DefaultBiome',
+        'DefaultMusicCombat',
+        'DefaultMusicCutscene',
+        'DefaultMusicMainMenu',
+        'DefaultMusicNight',
+        'DefaultMusicRegional',
+        'DefaultMusicSafeLocation',
+        'DefaultMusicUnderground',
+        'TimeHours',
+        'TimeDays',
+        'TimeMonths',
+        'TimeYears',
+        'WorldChunkTerrainHeightmapResolution',
+        'MaxSpawnedChunks',
+        'BaseDifficultySettingNames',
+        'NumChunkTilesX',
+        'NumChunkTilesZ',
+        'NeverUnloadChunks',
+        'GRTVisible',
+        'BaseDifficultySettings',
+        'FirstStartupPosition',
+      ].forEach(prop => {
+        obj[prop] = this[prop];
+      });
+      [
+        'DefaultTerrainType',
+        'DefaultAmbientAudio',
+        'DefaultAmbientAudioInterior',
+        'DefaultResidentFlags',
+      ].forEach(prop => {
+        obj[prop] = this[prop].toJSON();
+      });
+      [
+        'DefaultRevealedLocations',
+      ].forEach(prop => {
+        obj[prop] = {};
+        let
+          jsonProp = this[prop].toJSON()
+        ;
+        if(jsonProp.length > 0){
+          Object.keys(jsonProp[0]).forEach(propProp => {
+            obj[prop][propProp] = [];
+          });
+          jsonProp.forEach(propObj => {
+            Object.keys(propObj).forEach(propProp => {
+              obj[prop][propProp].push(propObj[propProp]);
+            });
+          });
+        }
+      });
+    }
+
     static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,

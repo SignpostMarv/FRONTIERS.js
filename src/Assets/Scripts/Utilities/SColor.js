@@ -122,6 +122,15 @@ export default (function(){
       return out;
     }
 
+    toJSON(){
+      return {
+        a: this.a,
+        r: this.r,
+        g: this.g,
+        b: this.b,
+      };
+    }
+
     static FromJXON(jxon, obj){
       return new Promise(function(resolve, reject){
         if(obj === undefined){

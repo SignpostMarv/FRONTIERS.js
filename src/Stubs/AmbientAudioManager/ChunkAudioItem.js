@@ -52,6 +52,17 @@ export default (function(){
       }
     }
 
+    toJSON(){
+      let
+        obj = {}
+      ;
+      obj.UseDefault = this.UseDefault;
+      obj.Key = this.Key;
+      obj.TargetVolume = this.TargetVolume;
+
+      return obj;
+    }
+
     static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,

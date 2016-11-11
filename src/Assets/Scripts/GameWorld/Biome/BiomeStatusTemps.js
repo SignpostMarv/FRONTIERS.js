@@ -82,6 +82,16 @@ export default (function(){
       )|0);
     }
 
+    toJSON(){
+      return {
+        UseDefaults: this.UseDefaults,
+        StatusTempQuarterMorning: this.StatusTempQuarterMorning.toJSON(),
+        StatusTempQuarterAfternoon: this.StatusTempQuarterAfternoon.toJSON(),
+        StatusTempQuarterEvening: this.StatusTempQuarterEvening.toJSON(),
+        StatusTempQuarterNight: this.StatusTempQuarterNight.toJSON(),
+      };
+    }
+
     static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,

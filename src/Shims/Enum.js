@@ -93,6 +93,10 @@ export default (function(){
       this[stringProp] = enumProps[0];
       this[valProp] = val;
     }
+
+    toJSON(){
+      return this.toInt();
+    }
   }
 
   Enum.prototype[valProp] = undefined;

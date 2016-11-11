@@ -1,6 +1,6 @@
 /*global module:false*/
 module.exports = function(grunt) {
-module.require('load-grunt-tasks')(grunt);
+  module.require('load-grunt-tasks')(grunt);
 
   // Project configuration.
   grunt.initConfig({
@@ -162,22 +162,23 @@ module.require('load-grunt-tasks')(grunt);
           baseUrl: 'build/es5/src',
           name: 'FRONTIERS',
           out: 'build/es5.FRONTIERS.js',
-
-      done: function(done, output) {
-        var duplicates = require('rjs-build-analysis').duplicates(output);
-
-        if (Object.keys(duplicates).length > 0) {
-          grunt.log.subhead('Duplicates found in requirejs build:');
-          for (var key in duplicates) {
-            grunt.log.error(duplicates[key] + ": " + key);
+          done: function(done, output) {
+            var
+              duplicates = module.require(
+                'rjs-build-analysis'
+              ).duplicates(output)
+            ;
+            if (Object.keys(duplicates).length > 0){
+              grunt.log.subhead('Duplicates found in requirejs build:');
+              for (var key in duplicates) {
+                grunt.log.error(duplicates[key] + ": " + key);
+              }
+              return done(new Error('r.js built duplicate modules, please check the excludes option.'));
+            }else{
+              grunt.log.success("No duplicates found!");
+            }
+            done();
           }
-          return done(new Error('r.js built duplicate modules, please check the excludes option.'));
-        } else {
-          grunt.log.success("No duplicates found!");
-        }
-
-        done();
-      }
         }
       }
     },

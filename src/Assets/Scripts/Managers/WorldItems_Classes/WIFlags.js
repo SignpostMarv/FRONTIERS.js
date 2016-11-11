@@ -186,6 +186,15 @@ export default (function(){
       this[props].Faction = val|0;
     }
 
+    toJSON(){
+      var
+        obj = {}
+      ;
+      Object.keys(defaultProps).forEach(prop => {
+        obj[prop] = this[prop];
+      });
+    }
+
     static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,

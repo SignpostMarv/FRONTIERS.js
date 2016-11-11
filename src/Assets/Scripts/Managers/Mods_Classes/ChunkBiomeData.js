@@ -743,6 +743,36 @@ export default (function(){
       return +0;
     }
 
+    toJSON(){
+      var
+        obj = {}
+      ;
+      Object.keys(defaultProps).forEach(prop => {
+        if(
+          this[prop] instanceof BiomeStatusTemps ||
+          this[prop] instanceof BiomeWeatherSetting
+        ){
+          var
+            foo = this[prop].toJSON(),
+            bar = 'BiomeStatusTemps'
+          ;
+          if(this[prop] instanceof BiomeWeatherSetting){
+            bar = 'BiomeWeatherSetting';
+          }
+          if(!(bar in obj)){
+            obj[bar] = {};
+            Object.keys(foo).forEach(propProp => {
+              obj[bar][propProp] = [];
+            });
+          }
+          Object.keys(foo).forEach(propProp => {
+            obj[bar][propProp].push(foo[propProp]);
+          });
+        }
+        obj[prop] = this[prop];
+      });
+    }
+
     static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,

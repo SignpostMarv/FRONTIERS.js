@@ -325,6 +325,15 @@ export default (function(){
       });
     }
 
+    toJSON(){
+      var
+        obj = {}
+      ;
+      Object.keys(defaultProps).forEach(prop => {
+        obj[prop] = this[prop];
+      });
+    }
+
     static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,

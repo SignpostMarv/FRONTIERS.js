@@ -164,6 +164,31 @@ export default (function(){
       });
     }
 
+    toJSON(){
+      var
+        obj = {
+          props: [],
+          UseDefault: [],
+          Key: [],
+          TargetVolume: [],
+        }
+      ;
+
+      Object.keys(expectingFromJxon).filter(prop => {
+        return expectingFromJxon[prop] === ChunkAudioItem;
+      }).map(prop => {
+        var
+          propJson = this[prop].toJSON()
+        ;
+        obj.props.push(prop);
+        Object.keys(propJson).forEach(
+          propProp => {
+            obj[propProp].push(propJson[propProp]);
+          }
+        );
+      });
+    }
+
     static FromJXON(jxon){
       return XmlHelper.JXON2Type(
         jxon,

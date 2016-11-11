@@ -176,6 +176,13 @@ export default (function(){
       });
     }
 
+    toJSON(){
+      return {
+        FileName: this.FileName,
+        GroupPath: this.GroupPath,
+      };
+    }
+
     static FromJXON(jxon){
       return new Promise(function(resolve, reject){
         if(
