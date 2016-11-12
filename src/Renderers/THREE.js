@@ -245,41 +245,6 @@ export default (function(){
           });
         });
       },
-      chunkTerrainDataHandler = function(resp){
-        return new Promise(function(resolve){
-          var
-            resolution = resp[2].HeightmapResolution,
-            chunkName = resp[0].ChunkName,
-            fileName = 'Raw16Mac',
-            dataType = Frontiers.DataType.World,
-            x = 0|0,
-            z = 0|0,
-            numTiles = 0|0,
-            tileSize = 0|0,
-            tilePromises = [],
-            tileHandler = makeTileHandler(resp)
-          ;
-          numTiles = (resolution - 1) / 32;
-          tileSize = ((resolution - 1) / numTiles) + 1;
-          for(z=0;z<numTiles;++z){
-            for(x=0;x<numTiles;++x){
-              tilePromises.push(Frontiers.Data.GameData.IO.LoadTerrainTile(
-                (x * (resolution - 1) / numTiles),
-                (z * (resolution - 1) / numTiles),
-                tileSize,
-                tileSize,
-                resolution,
-                chunkName,
-                fileName,
-                dataType
-              ).then(tileHandler));
-            }
-          }
-
-          resp.push(tilePromises);
-          resolve(resp);
-        });
-      },
       makeTileHandler = function(resp){
         var
           resolution = resp[2].HeightmapResolution
@@ -414,6 +379,41 @@ export default (function(){
 
           return lod;
         };
+      },
+      chunkTerrainDataHandler = function(resp){
+        return new Promise(function(resolve){
+          var
+            resolution = resp[2].HeightmapResolution,
+            chunkName = resp[0].ChunkName,
+            fileName = 'Raw16Mac',
+            dataType = Frontiers.DataType.World,
+            x = 0|0,
+            z = 0|0,
+            numTiles = 0|0,
+            tileSize = 0|0,
+            tilePromises = [],
+            tileHandler = makeTileHandler(resp)
+          ;
+          numTiles = (resolution - 1) / 32;
+          tileSize = ((resolution - 1) / numTiles) + 1;
+          for(z=0;z<numTiles;++z){
+            for(x=0;x<numTiles;++x){
+              tilePromises.push(Frontiers.Data.GameData.IO.LoadTerrainTile(
+                (x * (resolution - 1) / numTiles),
+                (z * (resolution - 1) / numTiles),
+                tileSize,
+                tileSize,
+                resolution,
+                chunkName,
+                fileName,
+                dataType
+              ).then(tileHandler));
+            }
+          }
+
+          resp.push(tilePromises);
+          resolve(resp);
+        });
       },
       patchesHandler = function(resp){
         return Promise.all(resp[3]);
